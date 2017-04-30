@@ -46,23 +46,24 @@ CRB_compile(CRB_Interpreter *interpreter, FILE *fp)
     extern int yyparse(void);
     extern FILE *yyin;
 
-    crb_set_current_interpreter(interpreter);
+    crb_set_current_interpreter(interpreter);  /* 设置一个全局变量，使得可以随时获取当前解释器 */
 
-    yyin = fp;
-    if (yyparse()) {
+    yyin = fp;  /* 指定yacc的输入源 */
+    if (yyparse()) {  /* 运行yyparse()方法，开始lex与yacc的词法分析与语法分析，最终利用程序源文件构建分析树 */
         /* BUGBUG */
         fprintf(stderr, "Error ! Error ! Error !\n");
         exit(1);
     }
-    crb_reset_string_literal_buffer();
+    crb_reset_string_literal_buffer();  /* 重置字符串buffer */
 }
 
+/* 申请运行时内存，初始化全局变量，执行程序语句列表 */
 void
 CRB_interpret(CRB_Interpreter *interpreter)
 {
-    interpreter->execute_storage = MEM_open_storage(0);
-    crb_add_std_fp(interpreter);
-    crb_execute_statement_list(interpreter, NULL, interpreter->statement_list);
+    interpreter->execute_storage = MEM_open_storage(0);  /* 创建执行存储内存空间 */
+    crb_add_std_fp(interpreter);  /* 声明STDIN、STDOUT、STDERR全局变量，分别对应C语言中的stdin、stdout、stderr */
+    crb_execute_statement_list(interpreter, NULL, interpreter->statement_list);  /* 执行程序语句 */
 }
 
 static void
@@ -76,16 +77,18 @@ release_global_strings(CRB_Interpreter *interpreter) {
     }
 }
 
+/* 释放解释器的所有内存 */
 void
 CRB_dispose_interpreter(CRB_Interpreter *interpreter)
 {
-    release_global_strings(interpreter);
+    release_global_strings(interpreter);  /* 释放全局字符串常量 */
 
+    /* 释放执行内存 */
     if (interpreter->execute_storage) {
         MEM_dispose_storage(interpreter->execute_storage);
     }
 
-    MEM_dispose_storage(interpreter->interpreter_storage);
+    MEM_dispose_storage(interpreter->interpreter_storage);  /* 释放解析程序源文件内存 */
 }
 
 void

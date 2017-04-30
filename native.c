@@ -195,6 +195,7 @@ CRB_Value crb_nv_fputs_proc(CRB_Interpreter *interpreter,
     return value;
 }
 
+/* 声明STDIN、STDOUT、STDERR全局变量，分别对应C语言中的stdin、stdout、stderr */
 void
 crb_add_std_fp(CRB_Interpreter *inter)
 {

@@ -32,6 +32,7 @@ crb_add_string_literal(int letter)
     st_string_literal_buffer_size++;
 }
 
+/* 重置读入buffer */
 void
 crb_reset_string_literal_buffer(void)
 {
