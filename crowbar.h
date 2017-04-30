@@ -292,7 +292,7 @@ ArgumentList *crb_chain_argument_list(ArgumentList *list, Expression *expr);
 StatementList *crb_create_statement_list(Statement *statement);
 StatementList *crb_chain_statement_list(StatementList *list,
                                         Statement *statement);
-Expression *crb_alloc_expression(ExpressionType type);
+Expression *crb_alloc_expression(ExpressionType type);  /* 创建表达式 */
 Expression *crb_create_assign_expression(char *variable,
                                          Expression *operand);
 Expression *crb_create_binary_expression(ExpressionType operator,
@@ -322,11 +322,11 @@ Statement *crb_create_break_statement(void);
 Statement *crb_create_continue_statement(void);
 
 /* string.c */
-char *crb_create_identifier(char *str);
-void crb_open_string_literal(void);
-void crb_add_string_literal(int letter);
+char *crb_create_identifier(char *str);  /* 创建变量名，传入变量名字符串，返回新copy的变量名字符串，地址不同 */
+void crb_open_string_literal(void);  /* 准备开始一个新的字符串 */
+void crb_add_string_literal(int letter);  /* 为当前字符串当中填充一个新的字符 */
 void crb_reset_string_literal_buffer(void);
-char *crb_close_string_literal(void);
+char *crb_close_string_literal(void);  /* 将字符串装入新空间，并返回新空间地址 */
 
 /* execute.c */
 StatementResult
