@@ -1,5 +1,7 @@
+# 这个是语音的测试代码，可以使用crowbar运行这个文件，虽然这个文件后缀为js，知识为了编辑代码的时候方便而已
 
-print("3 + 5.." + (3 + 5) + "\n");
+
+print("3 + 5 = " + (3 + 5) + "\n");
 
 for(i = 0; i<5; i = i+1) {
     j = i + 1;
@@ -25,11 +27,8 @@ while (true) {
     print("" + m + "\n");
 }
 
-hello();
-
-
-function hello() {
-    print("hello world 1\n");
-    print("hello world 2\n");
-    print("hello world 3\n");
+show("guohaifeng");
+function show(ok){
+	print("----" + ok + "\n");
 }
+print("oklalal\n");

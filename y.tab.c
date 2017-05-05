@@ -1551,14 +1551,14 @@ yyreduce:
   case 6:
 #line 55 "crowbar.y"
     {
-            crb_function_define((yyvsp[(2) - (6)].identifier), (yyvsp[(4) - (6)].parameter_list), (yyvsp[(6) - (6)].block));
+            crb_function_define((yyvsp[(2) - (6)].identifier), (yyvsp[(4) - (6)].parameter_list), (yyvsp[(6) - (6)].block));  /* 存入解释器中的function_list当中，无返回值 */
         }
     break;
 
   case 7:
 #line 59 "crowbar.y"
     {
-            crb_function_define((yyvsp[(2) - (5)].identifier), NULL, (yyvsp[(5) - (5)].block));
+            crb_function_define((yyvsp[(2) - (5)].identifier), NULL, (yyvsp[(5) - (5)].block));  /* 存入解释器中的function_list当中 */
         }
     break;
 
@@ -1593,14 +1593,14 @@ yyreduce:
   case 12:
 #line 85 "crowbar.y"
     {
-            (yyval.statement_list) = crb_create_statement_list((yyvsp[(1) - (1)].statement));
+            (yyval.statement_list) = crb_create_statement_list((yyvsp[(1) - (1)].statement));  /* 第一个程序语句，所以创建一个新的程序语句列表 */
         }
     break;
 
   case 13:
 #line 89 "crowbar.y"
     {
-            (yyval.statement_list) = crb_chain_statement_list((yyvsp[(1) - (2)].statement_list), (yyvsp[(2) - (2)].statement));
+            (yyval.statement_list) = crb_chain_statement_list((yyvsp[(1) - (2)].statement_list), (yyvsp[(2) - (2)].statement));  /* 链入已有的程序语句链 */
         }
     break;
 
