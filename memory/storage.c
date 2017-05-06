@@ -63,7 +63,7 @@ MEM_storage_malloc_func(MEM_Controller controller,
     MemoryPage          *new_page;
     void                *p;
 
-    cell_num = ((size - 1) / CELL_SIZE) + 1;
+    cell_num = (int) (((size - 1) / CELL_SIZE) + 1);
 
     if (storage->page_list != NULL
         && (storage->page_list->use_cell_num + cell_num

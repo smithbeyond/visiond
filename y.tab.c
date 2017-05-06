@@ -1761,14 +1761,14 @@ yyreduce:
   case 47:
 #line 212 "crowbar.y"
     {
-          (yyval.statement) = crb_create_expression_statement((yyvsp[(1) - (2)].expression));
+          (yyval.statement) = crb_create_expression_statement((yyvsp[(1) - (2)].expression));  /* 创建一个存储 expression 的 statement  */
         }
     break;
 
   case 55:
 #line 225 "crowbar.y"
     {
-            (yyval.statement) = crb_create_global_statement((yyvsp[(2) - (3)].identifier_list));
+            (yyval.statement) = crb_create_global_statement((yyvsp[(2) - (3)].identifier_list));  /* 参数为 identifier_list (变量名列表) */
         }
     break;
 

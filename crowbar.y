@@ -210,7 +210,7 @@ primary_expression
 statement
         : expression SEMICOLON  /* expression; （以;分号结尾，作为一个语句的结束符号） */
         {
-          $$ = crb_create_expression_statement($1);
+          $$ = crb_create_expression_statement($1);  /* 创建一个存储 expression 的 statement  */
         }
         | global_statement    /*   以特殊字符串 global 开头的语句   */
         | if_statement        /*   以特殊字符串 if 开头的语句       */
@@ -221,15 +221,15 @@ statement
         | continue_statement  /*   以特殊字符串 continue 开头的语句 */
         ;
 global_statement
-        : GLOBAL_T identifier_list SEMICOLON
+        : GLOBAL_T identifier_list SEMICOLON   /* 如：global name1, name2, name3; */
         {
-            $$ = crb_create_global_statement($2);
+            $$ = crb_create_global_statement($2);  /* 参数为 identifier_list (变量名列表) */
         }
         ;
-identifier_list
-        : IDENTIFIER
+identifier_list  /* identifier_list 主要是用于 global 变量类型 的使用 */
+        : IDENTIFIER  /* 当 IDENTIFIER 遇到 ,（COMMA：逗号）时候，会 规约到 identifier_list */
         {
-            $$ = crb_create_global_identifier($1);
+            $$ = crb_create_global_identifier($1);  /* 创建 */
         }
         | identifier_list COMMA IDENTIFIER
         {
@@ -241,15 +241,15 @@ if_statement
         {
             $$ = crb_create_if_statement($3, $5, NULL, NULL);
         }
-        | IF LP expression RP block ELSE block
+        | IF LP expression RP block ELSE block  /* 如：if(expression){ do something.... } else { do something.... } */
         {
             $$ = crb_create_if_statement($3, $5, NULL, $7);
         }
-        | IF LP expression RP block elsif_list
+        | IF LP expression RP block elsif_list  /* 如：if(expression){ do something.... } elsif {} elsif {}... */
         {
             $$ = crb_create_if_statement($3, $5, $6, NULL);
         }
-        | IF LP expression RP block elsif_list ELSE block
+        | IF LP expression RP block elsif_list ELSE block  /* 如:if(expression){ do something.... } elsif {}.. else{} */
         {
             $$ = crb_create_if_statement($3, $5, $6, $8);
         }

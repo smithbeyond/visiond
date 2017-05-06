@@ -319,7 +319,7 @@ Statement *crb_create_while_statement(Expression *condition, Block *block);
 Statement *crb_create_for_statement(Expression *init, Expression *cond,
                                     Expression *post, Block *block);
 Block *crb_create_block(StatementList *statement_list);
-Statement *crb_create_expression_statement(Expression *expression);
+Statement *crb_create_expression_statement(Expression *expression);  /* expression 规约为 statement */
 Statement *crb_create_return_statement(Expression *expression);
 Statement *crb_create_break_statement(void);
 Statement *crb_create_continue_statement(void);

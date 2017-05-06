@@ -1,4 +1,4 @@
-# 这个是语音的测试代码，可以使用crowbar运行这个文件，虽然这个文件后缀为js，知识为了编辑代码的时候方便而已
+# 这个是语音的测试代码，可以使用crowbar运行这个文件，可以把这个文件后缀改为js，编辑代码的时候会方便
 
 
 print("3 + 5 = " + (3 + 5) + "\n");
@@ -29,6 +29,8 @@ while (true) {
 
 show("guohaifeng");
 function show(ok){
+    global m;
 	print("----" + ok + "\n");
+	print("global m is : " + m + "\n");
 }
 print("oklalal\n");
