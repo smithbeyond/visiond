@@ -1,6 +1,6 @@
-//
-// Created by 国海峰 on 17/4/30.
-//
+/*
+** Created by 国海峰 on 17/4/30.
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,8 +33,6 @@ struct MEM_Storage_tag {
 
 #define larger(a, b) (((a) > (b)) ? (a) : (b))
 
-
-/* 第一次开辟内存快调用的函数 */
 MEM_Storage
 MEM_open_storage_func(MEM_Controller controller,
                       char *filename, int line, int page_size)
@@ -63,17 +61,17 @@ MEM_storage_malloc_func(MEM_Controller controller,
     MemoryPage          *new_page;
     void                *p;
 
-    cell_num = (int) (((size - 1) / CELL_SIZE) + 1);
+    cell_num = ((size - 1) / CELL_SIZE) + 1;
 
     if (storage->page_list != NULL
         && (storage->page_list->use_cell_num + cell_num
-            < storage->page_list->cell_num)) {  /* 如果还该内存块内还有空间可以继续使用，则直接使用*/
+            < storage->page_list->cell_num)) {
         p = &(storage->page_list->cell[storage->page_list->use_cell_num]);
         storage->page_list->use_cell_num += cell_num;
-    } else {  /* 否则，独立开辟出一块新的内存块，新的内存块处于双向内存块链表的首位 */
+    } else {
         int     alloc_cell_num;
 
-        alloc_cell_num = larger(cell_num, storage->current_page_size);  /* 开辟出一块 >= 上次storage内存大小的空间 */
+        alloc_cell_num = larger(cell_num, storage->current_page_size);
 
         new_page = MEM_malloc_func(controller, filename, line,
                                    sizeof(MemoryPage)

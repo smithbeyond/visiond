@@ -8,6 +8,7 @@
     ParameterList       *parameter_list;
     ArgumentList        *argument_list;
     Expression          *expression;
+    ExpressionList      *expression_list;
     Statement           *statement;
     StatementList       *statement_list;
     Block               *block;
@@ -19,15 +20,17 @@
 %token <expression>     STRING_LITERAL
 %token <identifier>     IDENTIFIER
 %token FUNCTION IF ELSE ELSIF WHILE FOR RETURN_T BREAK CONTINUE NULL_T
-        LP RP LC RC SEMICOLON COMMA ASSIGN LOGICAL_AND LOGICAL_OR
-        EQ NE GT GE LT LE ADD SUB MUL DIV MOD TRUE_T FALSE_T GLOBAL_T
+        LP RP LC RC LB RB SEMICOLON COMMA ASSIGN LOGICAL_AND LOGICAL_OR
+        EQ NE GT GE LT LE ADD SUB MUL DIV MOD TRUE_T FALSE_T GLOBAL_T DOT
+        INCREMENT DECREMENT
 %type   <parameter_list> parameter_list
 %type   <argument_list> argument_list
 %type   <expression> expression expression_opt
         logical_and_expression logical_or_expression
         equality_expression relational_expression
         additive_expression multiplicative_expression
-        unary_expression primary_expression
+        unary_expression postfix_expression primary_expression array_literal
+%type   <expression_list> expression_list
 %type   <statement> statement global_statement
         if_statement while_statement for_statement
         return_statement break_statement continue_statement
@@ -92,7 +95,7 @@ statement_list  /* 程序语句链，用于block的语句存储，当statement�
         ;
 expression  /* = (赋值运算) */
         : logical_or_expression
-        | IDENTIFIER ASSIGN expression  /* = (赋值运算)，如：value = expression */
+        | postfix_expression ASSIGN expression  /* = (赋值运算)，如：value = expression */
         {
             $$ = crb_create_assign_expression($1, $3);
         }
@@ -106,18 +109,18 @@ logical_or_expression  /* 逻辑 或 运算（ || ） */
         ;
 logical_and_expression  /* 逻辑与运算（&& 高于 ||） */
         : equality_expression
-        | logical_and_expression LOGICAL_AND equality_expression  /* 逻辑与运算 */
+        | logical_and_expression LOGICAL_AND equality_expression
         {
             $$ = crb_create_binary_expression(LOGICAL_AND_EXPRESSION, $1, $3);
         }
         ;
 equality_expression  /* 判断相等，一般返回true, false */
         : relational_expression
-        | equality_expression EQ relational_expression  /* == 相等 */
+        | equality_expression EQ relational_expression
         {
             $$ = crb_create_binary_expression(EQ_EXPRESSION, $1, $3);
         }
-        | equality_expression NE relational_expression  /* != 不相等 */
+        | equality_expression NE relational_expression
         {
             $$ = crb_create_binary_expression(NE_EXPRESSION, $1, $3);
         }
@@ -168,10 +171,33 @@ multiplicative_expression  /* 乘, 除, 取模 运算 */
         }
         ;
 unary_expression
-        : primary_expression
+        : postfix_expression
         | SUB unary_expression  /* 变负数 */
         {
             $$ = crb_create_minus_expression($2);
+        }
+        ;
+postfix_expression  /* 支持数组和字符串引用 */
+        : primary_expression
+        | postfix_expression LB expression RB
+        {
+            $$ = crb_create_index_expression($1, $3);
+        }
+        | postfix_expression DOT IDENTIFIER LP argument_list RP
+        {
+            $$ = crb_create_method_call_expression($1, $3, $5);
+        }
+        | postfix_expression DOT IDENTIFIER LP RP
+        {
+            $$ = crb_create_method_call_expression($1, $3, NULL);
+        }
+        | postfix_expression INCREMENT
+        {
+            $$ = crb_create_incdec_expression($1, INCREMENT_EXPRESSION);
+        }
+        | postfix_expression DECREMENT
+        {
+            $$ = crb_create_incdec_expression($1, DECREMENT_EXPRESSION);
         }
         ;
 primary_expression
@@ -206,11 +232,36 @@ primary_expression
         {
             $$ = crb_create_null_expression();
         }
+        | array_literal
+        ;
+array_literal  /* 用于array数组 */
+        : LC expression_list RC
+        {
+            $$ = crb_create_array_expression($2);
+        }
+        | LC expression_list COMMA RC
+        {
+            $$ = crb_create_array_expression($2);
+        }
+        ;
+expression_list  /* 主要用于数组的声明时候，以逗号分隔 */
+        : /* empty */
+        {
+            $$ = NULL;
+        }
+        | expression
+        {
+            $$ = crb_create_expression_list($1);
+        }
+        | expression_list COMMA expression
+        {
+            $$ = crb_chain_expression_list($1, $3);
+        }
         ;
 statement
         : expression SEMICOLON  /* expression; （以;分号结尾，作为一个语句的结束符号） */
         {
-          $$ = crb_create_expression_statement($1);  /* 创建一个存储 expression 的 statement  */
+          $$ = crb_create_expression_statement($1);
         }
         | global_statement    /*   以特殊字符串 global 开头的语句   */
         | if_statement        /*   以特殊字符串 if 开头的语句       */
@@ -229,7 +280,7 @@ global_statement
 identifier_list  /* identifier_list 主要是用于 global 变量类型 的使用 */
         : IDENTIFIER  /* 当 IDENTIFIER 遇到 ,（COMMA：逗号）时候，会 规约到 identifier_list */
         {
-            $$ = crb_create_global_identifier($1);  /* 创建 */
+            $$ = crb_create_global_identifier($1);
         }
         | identifier_list COMMA IDENTIFIER
         {
@@ -241,15 +292,15 @@ if_statement
         {
             $$ = crb_create_if_statement($3, $5, NULL, NULL);
         }
-        | IF LP expression RP block ELSE block  /* 如：if(expression){ do something.... } else { do something.... } */
+        | IF LP expression RP block ELSE block
         {
             $$ = crb_create_if_statement($3, $5, NULL, $7);
         }
-        | IF LP expression RP block elsif_list  /* 如：if(expression){ do something.... } elsif {} elsif {}... */
+        | IF LP expression RP block elsif_list
         {
             $$ = crb_create_if_statement($3, $5, $6, NULL);
         }
-        | IF LP expression RP block elsif_list ELSE block  /* 如:if(expression){ do something.... } elsif {}.. else{} */
+        | IF LP expression RP block elsif_list ELSE block
         {
             $$ = crb_create_if_statement($3, $5, $6, $8);
         }

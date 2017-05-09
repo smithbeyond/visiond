@@ -1,8 +1,7 @@
-//
-// Created by 国海峰 on 17/4/29.
-// 面向crowbar用户的接口
-//
-
+/*
+* Created by 国海峰 on 17/4/29.
+* 面向crowbar用户的接口
+*/
 #ifndef VISIOND_CRB_H
 #define VISIOND_CRB_H
 
@@ -16,4 +15,4 @@ void CRB_interpret(CRB_Interpreter *interpreter);
 void CRB_dispose_interpreter(CRB_Interpreter *interpreter);
 
 
-#endif //VISIOND_CRB_H
+#endif /* VISIOND_CRB_H */

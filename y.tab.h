@@ -57,25 +57,30 @@
      RP = 273,
      LC = 274,
      RC = 275,
-     SEMICOLON = 276,
-     COMMA = 277,
-     ASSIGN = 278,
-     LOGICAL_AND = 279,
-     LOGICAL_OR = 280,
-     EQ = 281,
-     NE = 282,
-     GT = 283,
-     GE = 284,
-     LT = 285,
-     LE = 286,
-     ADD = 287,
-     SUB = 288,
-     MUL = 289,
-     DIV = 290,
-     MOD = 291,
-     TRUE_T = 292,
-     FALSE_T = 293,
-     GLOBAL_T = 294
+     LB = 276,
+     RB = 277,
+     SEMICOLON = 278,
+     COMMA = 279,
+     ASSIGN = 280,
+     LOGICAL_AND = 281,
+     LOGICAL_OR = 282,
+     EQ = 283,
+     NE = 284,
+     GT = 285,
+     GE = 286,
+     LT = 287,
+     LE = 288,
+     ADD = 289,
+     SUB = 290,
+     MUL = 291,
+     DIV = 292,
+     MOD = 293,
+     TRUE_T = 294,
+     FALSE_T = 295,
+     GLOBAL_T = 296,
+     DOT = 297,
+     INCREMENT = 298,
+     DECREMENT = 299
    };
 #endif
 /* Tokens.  */
@@ -97,25 +102,30 @@
 #define RP 273
 #define LC 274
 #define RC 275
-#define SEMICOLON 276
-#define COMMA 277
-#define ASSIGN 278
-#define LOGICAL_AND 279
-#define LOGICAL_OR 280
-#define EQ 281
-#define NE 282
-#define GT 283
-#define GE 284
-#define LT 285
-#define LE 286
-#define ADD 287
-#define SUB 288
-#define MUL 289
-#define DIV 290
-#define MOD 291
-#define TRUE_T 292
-#define FALSE_T 293
-#define GLOBAL_T 294
+#define LB 276
+#define RB 277
+#define SEMICOLON 278
+#define COMMA 279
+#define ASSIGN 280
+#define LOGICAL_AND 281
+#define LOGICAL_OR 282
+#define EQ 283
+#define NE 284
+#define GT 285
+#define GE 286
+#define LT 287
+#define LE 288
+#define ADD 289
+#define SUB 290
+#define MUL 291
+#define DIV 292
+#define MOD 293
+#define TRUE_T 294
+#define FALSE_T 295
+#define GLOBAL_T 296
+#define DOT 297
+#define INCREMENT 298
+#define DECREMENT 299
 
 
 
@@ -128,6 +138,7 @@ typedef union YYSTYPE
     ParameterList       *parameter_list;
     ArgumentList        *argument_list;
     Expression          *expression;
+    ExpressionList      *expression_list;
     Statement           *statement;
     StatementList       *statement_list;
     Block               *block;
@@ -135,7 +146,7 @@ typedef union YYSTYPE
     IdentifierList      *identifier_list;
 }
 /* Line 1529 of yacc.c.  */
-#line 139 "y.tab.h"
+#line 150 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

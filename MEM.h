@@ -1,10 +1,9 @@
-//
-// Created by 国海峰 on 17/4/29.
-//
+/*
+** Created by 国海峰 on 17/4/29.
+*/
 
 #ifndef VISIOND_MEM_H
 #define VISIOND_MEM_H
-
 
 #include <stdio.h>
 #include <stdlib.h>

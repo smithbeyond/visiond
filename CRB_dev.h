@@ -1,7 +1,7 @@
-//
-// Created by 国海峰 on 17/4/29.
-// 面向内置函数开发人员的接口
-//
+/*
+** Created by 国海峰 on 17/4/29.
+** 面向内置函数开发人员的接口
+*/
 
 #ifndef VISIOND_CRB_DEV_H
 #define VISIOND_CRB_DEV_H
@@ -13,7 +13,10 @@ typedef enum {
     CRB_TRUE = 1
 } CRB_Boolean;
 
+typedef struct CRB_Object_tag CRB_Object;
+typedef struct CRB_Array_tag CRB_Array;
 typedef struct CRB_String_tag CRB_String;
+typedef struct CRB_LocalEnvironment_tag CRB_LocalEnvironment;
 
 typedef struct {
     char        *name;
@@ -25,7 +28,8 @@ typedef enum {
     CRB_DOUBLE_VALUE,
     CRB_STRING_VALUE,
     CRB_NATIVE_POINTER_VALUE,
-    CRB_NULL_VALUE
+    CRB_NULL_VALUE,
+    CRB_ARRAY_VALUE
 } CRB_ValueType;
 
 typedef struct {
@@ -39,18 +43,25 @@ typedef struct {
         CRB_Boolean     boolean_value;
         int             int_value;
         double          double_value;
-        CRB_String      *string_value;
         CRB_NativePointer       native_pointer;
+        CRB_Object      *object;
     } u;
 } CRB_Value;
 
 typedef CRB_Value CRB_NativeFunctionProc(CRB_Interpreter *interpreter,
+                                         CRB_LocalEnvironment *env,
                                          int arg_count, CRB_Value *args);
 
 void CRB_add_native_function(CRB_Interpreter *interpreter,
                              char *name, CRB_NativeFunctionProc *proc);
 void CRB_add_global_variable(CRB_Interpreter *inter,
                              char *identifier, CRB_Value *value);
+CRB_Object *
+CRB_create_crowbar_string(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
+                          char *str);
+CRB_Object *CRB_create_array(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
+                             int size);
 
+char *CRB_value_to_string(CRB_Value *value);
 
 #endif //VISIOND_CRB_DEV_H

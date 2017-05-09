@@ -1,7 +1,3 @@
-//
-// Created by 国海峰 on 17/4/30.
-//
-
 #ifndef VISIOND_DBG_H
 #define VISIOND_DBG_H
 
@@ -56,5 +52,4 @@ void DBG_set_debug_write_fp_func(DBG_Controller controller, FILE *fp);
 void DBG_assert_func(char *fmt, ...);
 void DBG_panic_func(char *fmt, ...);
 void DBG_debug_write_func(int level, char *fmt, ...);
-
 #endif //VISIOND_DBG_H

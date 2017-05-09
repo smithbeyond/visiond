@@ -15,7 +15,7 @@ for(i = 0; i<5; i = i+1) {
 
 m = 0;
 
-while (true) {
+while (true || true) {
     m = m + 1;
     if (m > 6) {
         break;

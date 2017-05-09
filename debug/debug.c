@@ -1,6 +1,6 @@
-//
-// Created by 国海峰 on 17/4/30.
-//
+/*
+** Created by 国海峰 on 17/4/30.
+*/
 
 #include <stdio.h>
 #include <limits.h>
@@ -14,8 +14,8 @@ static int      st_current_line;
 static char     *st_assert_expression;
 
 static struct DBG_Controller_tag st_default_controller = {
-    NULL, /*stderr,*/
-    INT_MAX,
+        NULL, /*stderr,*/
+        INT_MAX,
 };
 DBG_Controller  dbg_default_controller = &st_default_controller;
 
