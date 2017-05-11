@@ -1,9 +1,7 @@
-/************************************************************
- * Copyright (C) K.Maebashi 1997/07/02
- ************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "memory.h"
 
 static void default_error_handler(MEM_Controller controller,
@@ -311,6 +309,7 @@ MEM_dump_blocks_func(MEM_Controller controller, FILE *fp)
 #ifdef DEBUG
     Header *pos;
     int counter = 0;
+    int i;
 
     for (pos = controller->block_header; pos; pos = pos->s.next) {
         check_mark(pos);
@@ -318,6 +317,15 @@ MEM_dump_blocks_func(MEM_Controller controller, FILE *fp)
                 (char*)pos + sizeof(Header));
         fprintf(fp, "%s line %d size..%d\n",
                 pos->s.filename, pos->s.line, pos->s.size);
+        fprintf(fp, "[");
+        for (i = 0; i < pos->s.size; i++) {
+            if (isprint(*((char*)pos + sizeof(Header)+i))) {
+                fprintf(fp, "%c", *((char*)pos + sizeof(Header)+i));
+            } else {
+                fprintf(fp, ".");
+            }
+        }
+        fprintf(fp, "]\n");
         counter++;
     }
 #endif /* DEBUG */

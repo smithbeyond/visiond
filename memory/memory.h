@@ -17,5 +17,4 @@ struct MEM_Controller_tag {
     Header      *block_header;
 };
 
-
 #endif /* VISIOND_MEMORY_H */

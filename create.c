@@ -2,46 +2,58 @@
 #include "DBG.h"
 #include "crowbar.h"
 
-void
-crb_function_define(char *identifier, ParameterList *parameter_list,
-                    Block *block)
+static CRB_FunctionDefinition *
+create_function_definition(char *identifier, CRB_ParameterList *parameter_list,
+                           CRB_Boolean is_closure, CRB_Block *block)
 {
-    FunctionDefinition *f;
-    CRB_Interpreter *inter;
+    CRB_FunctionDefinition *f;
 
-    if (crb_search_function(identifier)) {
-        crb_compile_error(FUNCTION_MULTIPLE_DEFINE_ERR,
-                          STRING_MESSAGE_ARGUMENT, "name", identifier,
-                          MESSAGE_ARGUMENT_END);
-        return;
-    }
-    inter = crb_get_current_interpreter();
-
-    f = crb_malloc(sizeof(FunctionDefinition));
+    f = crb_malloc(sizeof(CRB_FunctionDefinition));
     f->name = identifier;
-    f->type = CROWBAR_FUNCTION_DEFINITION;
+    f->type = CRB_CROWBAR_FUNCTION_DEFINITION;
+    f->is_closure = is_closure;
     f->u.crowbar_f.parameter = parameter_list;
     f->u.crowbar_f.block = block;
+
+    return f;
+}
+
+void
+crb_function_define(char *identifier, CRB_ParameterList *parameter_list,
+                    CRB_Block *block)
+{
+    CRB_FunctionDefinition *f;
+    CRB_Interpreter *inter;
+
+    if (crb_search_function_in_compile(identifier)) {
+        crb_compile_error(FUNCTION_MULTIPLE_DEFINE_ERR,
+                          CRB_STRING_MESSAGE_ARGUMENT, "name", identifier,
+                          CRB_MESSAGE_ARGUMENT_END);
+        return;
+    }
+    f = create_function_definition(identifier, parameter_list, CRB_FALSE,
+                                   block);
+    inter = crb_get_current_interpreter();
     f->next = inter->function_list;
     inter->function_list = f;
 }
 
-ParameterList *
+CRB_ParameterList *
 crb_create_parameter(char *identifier)
 {
-    ParameterList       *p;
+    CRB_ParameterList   *p;
 
-    p = crb_malloc(sizeof(ParameterList));
+    p = crb_malloc(sizeof(CRB_ParameterList));
     p->name = identifier;
     p->next = NULL;
 
     return p;
 }
 
-ParameterList *
-crb_chain_parameter(ParameterList *list, char *identifier)
+CRB_ParameterList *
+crb_chain_parameter(CRB_ParameterList *list, char *identifier)
 {
-    ParameterList *pos;
+    CRB_ParameterList *pos;
 
     for (pos = list; pos->next; pos = pos->next)
         ;
@@ -138,12 +150,37 @@ crb_alloc_expression(ExpressionType type)
 }
 
 Expression *
-crb_create_assign_expression(Expression *left, Expression *operand)
+crb_create_comma_expression(Expression *left, Expression *right)
+{
+    Expression *exp;
+
+    exp = crb_alloc_expression(COMMA_EXPRESSION);
+    exp->u.comma.left = left;
+    exp->u.comma.right = right;
+
+    return exp;
+}
+
+Expression *
+crb_create_assign_expression(CRB_Boolean is_final,
+                             Expression *left, AssignmentOperator operator,
+                             Expression *operand)
 {
     Expression *exp;
 
     exp = crb_alloc_expression(ASSIGN_EXPRESSION);
+    if (is_final) {
+        if (left->type == INDEX_EXPRESSION) {
+            crb_compile_error(ARRAY_ELEMENT_CAN_NOT_BE_FINAL_ERR,
+                              CRB_MESSAGE_ARGUMENT_END);
+        } else if (operator != NORMAL_ASSIGN) {
+            crb_compile_error(COMPLEX_ASSIGNMENT_OPERATOR_TO_FINAL_ERR,
+                              CRB_MESSAGE_ARGUMENT_END);
+        }
+    }
+    exp->u.assign_expression.is_final = is_final;
     exp->u.assign_expression.left = left;
+    exp->u.assign_expression.operator = operator;
     exp->u.assign_expression.operand = operand;
 
     return exp;
@@ -160,9 +197,7 @@ convert_value_to_expression(CRB_Value *v)
     } else if (v->type == CRB_DOUBLE_VALUE) {
         expr.type = DOUBLE_EXPRESSION;
         expr.u.double_value = v->u.double_value;
-    } else {
-        DBG_assert(v->type == CRB_BOOLEAN_VALUE,
-                   ("v->type..%d\n", v->type));
+    } else if (v->type == CRB_BOOLEAN_VALUE) {
         expr.type = BOOLEAN_EXPRESSION;
         expr.u.boolean_value = v->u.boolean_value;
     }
@@ -213,6 +248,17 @@ crb_create_minus_expression(Expression *operand)
 }
 
 Expression *
+crb_create_logical_not_expression(Expression *operand)
+{
+    Expression  *exp;
+
+    exp = crb_alloc_expression(LOGICAL_NOT_EXPRESSION);
+    exp->u.logical_not = operand;
+
+    return exp;
+}
+
+Expression *
 crb_create_index_expression(Expression *array, Expression *index)
 {
     Expression *exp;
@@ -248,27 +294,26 @@ crb_create_identifier_expression(char *identifier)
 }
 
 Expression *
-crb_create_function_call_expression(char *func_name, ArgumentList *argument)
+crb_create_function_call_expression(Expression *function,
+                                    ArgumentList *argument)
 {
     Expression  *exp;
 
     exp = crb_alloc_expression(FUNCTION_CALL_EXPRESSION);
-    exp->u.function_call_expression.identifier = func_name;
+    exp->u.function_call_expression.function = function;
     exp->u.function_call_expression.argument = argument;
 
     return exp;
 }
 
 Expression *
-crb_create_method_call_expression(Expression *expression,
-                                  char *method_name, ArgumentList *argument)
+crb_create_member_expression(Expression *expression, char *member_name)
 {
     Expression  *exp;
 
-    exp = crb_alloc_expression(METHOD_CALL_EXPRESSION);
-    exp->u.method_call_expression.expression = expression;
-    exp->u.method_call_expression.identifier = method_name;
-    exp->u.method_call_expression.argument = argument;
+    exp = crb_alloc_expression(MEMBER_EXPRESSION);
+    exp->u.member_expression.expression = expression;
+    exp->u.member_expression.member_name = member_name;
 
     return exp;
 }
@@ -302,6 +347,21 @@ crb_create_array_expression(ExpressionList *list)
 
     exp = crb_alloc_expression(ARRAY_EXPRESSION);
     exp->u.array_literal = list;
+
+    return exp;
+}
+
+Expression *
+crb_create_closure_definition(char *identifier,
+                              CRB_ParameterList *parameter_list,
+                              CRB_Block *block)
+{
+    Expression  *exp;
+
+    exp = crb_alloc_expression(CLOSURE_EXPRESSION);
+    exp->u.closure.function_definition
+            = create_function_definition(identifier, parameter_list, CRB_TRUE,
+                                         block);
 
     return exp;
 }
@@ -355,8 +415,8 @@ crb_chain_identifier(IdentifierList *list, char *identifier)
 
 Statement *
 crb_create_if_statement(Expression *condition,
-                        Block *then_block, Elsif *elsif_list,
-                        Block *else_block)
+                        CRB_Block *then_block, Elsif *elsif_list,
+                        CRB_Block *else_block)
 {
     Statement *st;
 
@@ -382,7 +442,7 @@ crb_chain_elsif_list(Elsif *list, Elsif *add)
 }
 
 Elsif *
-crb_create_elsif(Expression *expr, Block *block)
+crb_create_elsif(Expression *expr, CRB_Block *block)
 {
     Elsif *ei;
 
@@ -395,11 +455,13 @@ crb_create_elsif(Expression *expr, Block *block)
 }
 
 Statement *
-crb_create_while_statement(Expression *condition, Block *block)
+crb_create_while_statement(char *label,
+                           Expression *condition, CRB_Block *block)
 {
     Statement *st;
 
     st = alloc_statement(WHILE_STATEMENT);
+    st->u.while_s.label = label;
     st->u.while_s.condition = condition;
     st->u.while_s.block = block;
 
@@ -407,12 +469,13 @@ crb_create_while_statement(Expression *condition, Block *block)
 }
 
 Statement *
-crb_create_for_statement(Expression *init, Expression *cond,
-                         Expression *post, Block *block)
+crb_create_for_statement(char *label, Expression *init, Expression *cond,
+                         Expression *post, CRB_Block *block)
 {
     Statement *st;
 
     st = alloc_statement(FOR_STATEMENT);
+    st->u.for_s.label = label;
     st->u.for_s.init = init;
     st->u.for_s.condition = cond;
     st->u.for_s.post = post;
@@ -421,12 +484,27 @@ crb_create_for_statement(Expression *init, Expression *cond,
     return st;
 }
 
-Block *
+Statement *
+crb_create_foreach_statement(char *label, char *variable,
+                             Expression *collection, CRB_Block *block)
+{
+    Statement *st;
+
+    st = alloc_statement(FOREACH_STATEMENT);
+    st->u.foreach_s.label = label;
+    st->u.foreach_s.variable = variable;
+    st->u.foreach_s.collection = collection;
+    st->u.for_s.block = block;
+
+    return st;
+}
+
+CRB_Block *
 crb_create_block(StatementList *statement_list)
 {
-    Block *block;
+    CRB_Block *block;
 
-    block = crb_malloc(sizeof(Block));
+    block = crb_malloc(sizeof(CRB_Block));
     block->statement_list = statement_list;
 
     return block;
@@ -454,13 +532,50 @@ crb_create_return_statement(Expression *expression)
     return st;
 }
 
-Statement *crb_create_break_statement(void)
+Statement *
+crb_create_break_statement(char *label)
 {
-    return alloc_statement(BREAK_STATEMENT);
+    Statement *st;
+
+    st = alloc_statement(BREAK_STATEMENT);
+    st->u.break_s.label = label;
+
+    return st;
 }
 
-Statement *crb_create_continue_statement(void)
+Statement *
+crb_create_continue_statement(char *label)
 {
-    return alloc_statement(CONTINUE_STATEMENT);
+    Statement *st;
+
+    st = alloc_statement(CONTINUE_STATEMENT);
+    st->u.continue_s.label = label;
+
+    return st;
 }
 
+Statement *
+crb_create_try_statement(CRB_Block *try_block, char *exception,
+                         CRB_Block *catch_block, CRB_Block *finally_block)
+{
+    Statement *st;
+
+    st = alloc_statement(TRY_STATEMENT);
+    st->u.try_s.try_block = try_block;
+    st->u.try_s.catch_block = catch_block;
+    st->u.try_s.exception = exception;
+    st->u.try_s.finally_block = finally_block;
+
+    return st;
+}
+
+Statement *
+crb_create_throw_statement(Expression *expression)
+{
+    Statement *st;
+
+    st = alloc_statement(THROW_STATEMENT);
+    st->u.throw_s.exception = expression;
+
+    return st;
+}

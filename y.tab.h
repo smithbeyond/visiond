@@ -42,90 +42,120 @@
      INT_LITERAL = 258,
      DOUBLE_LITERAL = 259,
      STRING_LITERAL = 260,
-     IDENTIFIER = 261,
-     FUNCTION = 262,
-     IF = 263,
-     ELSE = 264,
-     ELSIF = 265,
-     WHILE = 266,
-     FOR = 267,
-     RETURN_T = 268,
-     BREAK = 269,
-     CONTINUE = 270,
-     NULL_T = 271,
-     LP = 272,
-     RP = 273,
-     LC = 274,
-     RC = 275,
-     LB = 276,
-     RB = 277,
-     SEMICOLON = 278,
-     COMMA = 279,
-     ASSIGN = 280,
-     LOGICAL_AND = 281,
-     LOGICAL_OR = 282,
-     EQ = 283,
-     NE = 284,
-     GT = 285,
-     GE = 286,
-     LT = 287,
-     LE = 288,
-     ADD = 289,
-     SUB = 290,
-     MUL = 291,
-     DIV = 292,
-     MOD = 293,
-     TRUE_T = 294,
-     FALSE_T = 295,
-     GLOBAL_T = 296,
-     DOT = 297,
-     INCREMENT = 298,
-     DECREMENT = 299
+     REGEXP_LITERAL = 261,
+     IDENTIFIER = 262,
+     FUNCTION = 263,
+     IF = 264,
+     ELSE = 265,
+     ELSIF = 266,
+     WHILE = 267,
+     FOR = 268,
+     FOREACH = 269,
+     RETURN_T = 270,
+     BREAK = 271,
+     CONTINUE = 272,
+     NULL_T = 273,
+     LP = 274,
+     RP = 275,
+     LC = 276,
+     RC = 277,
+     LB = 278,
+     RB = 279,
+     SEMICOLON = 280,
+     COLON = 281,
+     COMMA = 282,
+     ASSIGN_T = 283,
+     LOGICAL_AND = 284,
+     LOGICAL_OR = 285,
+     EQ = 286,
+     NE = 287,
+     GT = 288,
+     GE = 289,
+     LT = 290,
+     LE = 291,
+     ADD = 292,
+     SUB = 293,
+     MUL = 294,
+     DIV = 295,
+     MOD = 296,
+     TRUE_T = 297,
+     FALSE_T = 298,
+     EXCLAMATION = 299,
+     DOT = 300,
+     ADD_ASSIGN_T = 301,
+     SUB_ASSIGN_T = 302,
+     MUL_ASSIGN_T = 303,
+     DIV_ASSIGN_T = 304,
+     MOD_ASSIGN_T = 305,
+     INCREMENT = 306,
+     DECREMENT = 307,
+     CLOSURE = 308,
+     GLOBAL_T = 309,
+     TRY = 310,
+     CATCH = 311,
+     FINALLY = 312,
+     THROW = 313,
+     FINAL = 314
    };
 #endif
 /* Tokens.  */
 #define INT_LITERAL 258
 #define DOUBLE_LITERAL 259
 #define STRING_LITERAL 260
-#define IDENTIFIER 261
-#define FUNCTION 262
-#define IF 263
-#define ELSE 264
-#define ELSIF 265
-#define WHILE 266
-#define FOR 267
-#define RETURN_T 268
-#define BREAK 269
-#define CONTINUE 270
-#define NULL_T 271
-#define LP 272
-#define RP 273
-#define LC 274
-#define RC 275
-#define LB 276
-#define RB 277
-#define SEMICOLON 278
-#define COMMA 279
-#define ASSIGN 280
-#define LOGICAL_AND 281
-#define LOGICAL_OR 282
-#define EQ 283
-#define NE 284
-#define GT 285
-#define GE 286
-#define LT 287
-#define LE 288
-#define ADD 289
-#define SUB 290
-#define MUL 291
-#define DIV 292
-#define MOD 293
-#define TRUE_T 294
-#define FALSE_T 295
-#define GLOBAL_T 296
-#define DOT 297
-#define INCREMENT 298
-#define DECREMENT 299
+#define REGEXP_LITERAL 261
+#define IDENTIFIER 262
+#define FUNCTION 263
+#define IF 264
+#define ELSE 265
+#define ELSIF 266
+#define WHILE 267
+#define FOR 268
+#define FOREACH 269
+#define RETURN_T 270
+#define BREAK 271
+#define CONTINUE 272
+#define NULL_T 273
+#define LP 274
+#define RP 275
+#define LC 276
+#define RC 277
+#define LB 278
+#define RB 279
+#define SEMICOLON 280
+#define COLON 281
+#define COMMA 282
+#define ASSIGN_T 283
+#define LOGICAL_AND 284
+#define LOGICAL_OR 285
+#define EQ 286
+#define NE 287
+#define GT 288
+#define GE 289
+#define LT 290
+#define LE 291
+#define ADD 292
+#define SUB 293
+#define MUL 294
+#define DIV 295
+#define MOD 296
+#define TRUE_T 297
+#define FALSE_T 298
+#define EXCLAMATION 299
+#define DOT 300
+#define ADD_ASSIGN_T 301
+#define SUB_ASSIGN_T 302
+#define MUL_ASSIGN_T 303
+#define DIV_ASSIGN_T 304
+#define MOD_ASSIGN_T 305
+#define INCREMENT 306
+#define DECREMENT 307
+#define CLOSURE 308
+#define GLOBAL_T 309
+#define TRY 310
+#define CATCH 311
+#define FINALLY 312
+#define THROW 313
+#define FINAL 314
 
 
 
@@ -135,18 +165,19 @@ typedef union YYSTYPE
 #line 6 "crowbar.y"
 {
     char                *identifier;
-    ParameterList       *parameter_list;
+    CRB_ParameterList   *parameter_list;
     ArgumentList        *argument_list;
     Expression          *expression;
     ExpressionList      *expression_list;
     Statement           *statement;
     StatementList       *statement_list;
-    Block               *block;
+    CRB_Block           *block;
     Elsif               *elsif;
+    AssignmentOperator  assignment_operator;
     IdentifierList      *identifier_list;
 }
 /* Line 1529 of yacc.c.  */
-#line 150 "y.tab.h"
+#line 181 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

@@ -55,11 +55,9 @@ void MEM_check_block_func(MEM_Controller controller,
 void MEM_check_all_blocks_func(MEM_Controller controller,
                                char *filename, int line);
 
-/* 开辟内存空间 */
 #define MEM_malloc(size)\
   (MEM_malloc_func(MEM_CURRENT_CONTROLLER,\
                    __FILE__, __LINE__, size))
-/* 扩充空间 */
 #define MEM_realloc(ptr, size)\
   (MEM_realloc_func(MEM_CURRENT_CONTROLLER, __FILE__, __LINE__, ptr, size))
 #define MEM_strdup(str)\
@@ -81,11 +79,9 @@ void MEM_check_all_blocks_func(MEM_Controller controller,
 #define MEM_check_all_blocks()\
   (MEM_check_all_blocks_func(MEM_CURRENT_CONTROLLER, __FILE__, __LINE__))
 #else /* DEBUG */
-/*转储所有内存空间*/
 #define MEM_dump_blocks(fp) ((void)0)
 #define MEM_check_block(p)  ((void)0)
 #define MEM_check_all_blocks() ((void)0)
 #endif /* DEBUG */
-
 
 #endif //VISIOND_MEM_H
