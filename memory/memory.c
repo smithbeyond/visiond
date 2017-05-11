@@ -8,9 +8,9 @@ static void default_error_handler(MEM_Controller controller,
                                   char *filename, int line, char *msg);
 
 static struct MEM_Controller_tag st_default_controller = {
-        NULL,/* stderr */
-        default_error_handler,
-        MEM_FAIL_AND_EXIT
+    NULL,/* stderr */
+    default_error_handler,
+    MEM_FAIL_AND_EXIT
 };
 MEM_Controller mem_default_controller = &st_default_controller;
 
@@ -257,7 +257,7 @@ MEM_strdup_func(MEM_Controller controller, char *filename, int line,
     }
 
 #ifdef DEBUG
-        memset(ptr, 0xCC, alloc_size);
+    memset(ptr, 0xCC, alloc_size);
     set_header((Header*)ptr, size, filename, line);
     set_tail(ptr, alloc_size);
     chain_block(controller, (Header*)ptr);

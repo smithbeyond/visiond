@@ -1,7 +1,3 @@
-/**
- * Created by 国海峰 on 17/5/9.
- */
-
 #include "DBG.h"
 #include "crowbar.h"
 

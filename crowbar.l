@@ -28,7 +28,7 @@ file_input(char *buf, int max_size)
 static char **st_source_string;
 static int st_current_source_line;
 static int st_current_char_index;
-
+ 
 void
 crb_set_source_string(char **source)
 {

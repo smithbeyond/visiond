@@ -1,9 +1,5 @@
-/*
-** Created by 国海峰 on 17/4/29.
-*/
-
-#ifndef VISIOND_MEM_H
-#define VISIOND_MEM_H
+#ifndef PUBLIC_MEM_H
+#define PUBLIC_MEM_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -84,4 +80,4 @@ void MEM_check_all_blocks_func(MEM_Controller controller,
 #define MEM_check_all_blocks() ((void)0)
 #endif /* DEBUG */
 
-#endif //VISIOND_MEM_H
+#endif  /* PUBLIC_MEM_H */

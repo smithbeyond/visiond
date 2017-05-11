@@ -1,6 +1,3 @@
-/*
-** Created by 国海峰 on 17/4/30.
-*/
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -30,32 +27,32 @@ create_message_argument(MessageArgument *arg, va_list ap)
 {
     int index = 0;
     CRB_MessageArgumentType type;
-
+    
     while ((type = va_arg(ap, CRB_MessageArgumentType))
            != CRB_MESSAGE_ARGUMENT_END) {
         arg[index].type = type;
         arg[index].name = va_arg(ap, char*);
         switch (type) {
-            case CRB_INT_MESSAGE_ARGUMENT:
-                arg[index].u.int_val = va_arg(ap, int);
-                break;
-            case CRB_DOUBLE_MESSAGE_ARGUMENT:
-                arg[index].u.double_val = va_arg(ap, double);
-                break;
-            case CRB_STRING_MESSAGE_ARGUMENT:
-                arg[index].u.string_val = va_arg(ap, char*);
-                break;
-            case CRB_POINTER_MESSAGE_ARGUMENT:
-                arg[index].u.pointer_val = va_arg(ap, void*);
-                break;
-            case CRB_CHARACTER_MESSAGE_ARGUMENT:
-                arg[index].u.character_val = va_arg(ap, int);
-                break;
-            case CRB_MESSAGE_ARGUMENT_END:
-                assert(0);
-                break;
-            default:
-                assert(0);
+        case CRB_INT_MESSAGE_ARGUMENT:
+            arg[index].u.int_val = va_arg(ap, int);
+            break;
+        case CRB_DOUBLE_MESSAGE_ARGUMENT:
+            arg[index].u.double_val = va_arg(ap, double);
+            break;
+        case CRB_STRING_MESSAGE_ARGUMENT:
+            arg[index].u.string_val = va_arg(ap, char*);
+            break;
+        case CRB_POINTER_MESSAGE_ARGUMENT:
+            arg[index].u.pointer_val = va_arg(ap, void*);
+            break;
+        case CRB_CHARACTER_MESSAGE_ARGUMENT:
+            arg[index].u.character_val = va_arg(ap, int);
+            break;
+        case CRB_MESSAGE_ARGUMENT_END:
+            assert(0);
+            break;
+        default:
+            assert(0);
         }
         index++;
         assert(index < MESSAGE_ARGUMENT_MAX);
@@ -95,7 +92,7 @@ format_message(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
 
     wc_format = CRB_mbstowcs_alloc(inter, env, line_number, format->format);
     DBG_assert(wc_format != NULL, ("wc_format is null.\n"));
-
+    
     for (i = 0; wc_format[i] != L'\0'; i++) {
         if (wc_format[i] != L'$') {
             crb_vstr_append_character(v, wc_format[i]);
@@ -112,35 +109,35 @@ format_message(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
 
         search_argument(arg, arg_name, &cur_arg);
         switch (cur_arg.type) {
-            case CRB_INT_MESSAGE_ARGUMENT:
-                sprintf(buf, "%d", cur_arg.u.int_val);
-                CRB_mbstowcs(buf, wc_buf);
-                crb_vstr_append_string(v, wc_buf);
-                break;
-            case CRB_DOUBLE_MESSAGE_ARGUMENT:
-                sprintf(buf, "%f", cur_arg.u.double_val);
-                CRB_mbstowcs(buf, wc_buf);
-                crb_vstr_append_string(v, wc_buf);
-                break;
-            case CRB_STRING_MESSAGE_ARGUMENT:
-                CRB_mbstowcs(cur_arg.u.string_val, wc_buf);
-                crb_vstr_append_string(v, wc_buf);
-                break;
-            case CRB_POINTER_MESSAGE_ARGUMENT:
-                sprintf(buf, "%p", cur_arg.u.pointer_val);
-                CRB_mbstowcs(buf, wc_buf);
-                crb_vstr_append_string(v, wc_buf);
-                break;
-            case CRB_CHARACTER_MESSAGE_ARGUMENT:
-                sprintf(buf, "%c", cur_arg.u.character_val);
-                CRB_mbstowcs(buf, wc_buf);
-                crb_vstr_append_string(v, wc_buf);
-                break;
-            case CRB_MESSAGE_ARGUMENT_END:
-                assert(0);
-                break;
-            default:
-                assert(0);
+        case CRB_INT_MESSAGE_ARGUMENT:
+            sprintf(buf, "%d", cur_arg.u.int_val);
+            CRB_mbstowcs(buf, wc_buf);
+            crb_vstr_append_string(v, wc_buf);
+            break;
+        case CRB_DOUBLE_MESSAGE_ARGUMENT:
+            sprintf(buf, "%f", cur_arg.u.double_val);
+            CRB_mbstowcs(buf, wc_buf);
+            crb_vstr_append_string(v, wc_buf);
+            break;
+        case CRB_STRING_MESSAGE_ARGUMENT:
+            CRB_mbstowcs(cur_arg.u.string_val, wc_buf);
+            crb_vstr_append_string(v, wc_buf);
+            break;
+        case CRB_POINTER_MESSAGE_ARGUMENT:
+            sprintf(buf, "%p", cur_arg.u.pointer_val);
+            CRB_mbstowcs(buf, wc_buf);
+            crb_vstr_append_string(v, wc_buf);
+            break;
+        case CRB_CHARACTER_MESSAGE_ARGUMENT:
+            sprintf(buf, "%c", cur_arg.u.character_val);
+            CRB_mbstowcs(buf, wc_buf);
+            crb_vstr_append_string(v, wc_buf);
+            break;
+        case CRB_MESSAGE_ARGUMENT_END:
+            assert(0);
+            break;
+        default:
+            assert(0);
         }
     }
     MEM_free(wc_format);
@@ -156,8 +153,8 @@ self_check()
                [COMPILE_ERROR_COUNT_PLUS_1].format,
                "dummy") != 0) {
         DBG_panic(("compile error message format error. "
-                "COMPILE_ERROR_COUNT_PLUS_1..%d\n",
-                COMPILE_ERROR_COUNT_PLUS_1));
+                   "COMPILE_ERROR_COUNT_PLUS_1..%d\n",
+                   COMPILE_ERROR_COUNT_PLUS_1));
     }
     if (strcmp(crb_runtime_error_message_format[0].format, "dummy") != 0) {
         DBG_panic(("runtime error message format error.\n"));
@@ -166,8 +163,8 @@ self_check()
                [RUNTIME_ERROR_COUNT_PLUS_1].format,
                "dummy") != 0) {
         DBG_panic(("runtime error message format error. "
-                "RUNTIME_ERROR_COUNT_PLUS_1..%d\n",
-                RUNTIME_ERROR_COUNT_PLUS_1));
+                   "RUNTIME_ERROR_COUNT_PLUS_1..%d\n",
+                   RUNTIME_ERROR_COUNT_PLUS_1));
     }
 }
 

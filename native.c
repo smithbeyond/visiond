@@ -23,14 +23,14 @@ typedef enum {
 extern CRB_ErrorDefinition crb_native_error_message_format[];
 
 static CRB_NativeLibInfo st_lib_info = {
-        crb_native_error_message_format,
+    crb_native_error_message_format,
 };
 
 static void file_finalizer(CRB_Interpreter *inter, CRB_Object *obj);
 
 static CRB_NativePointerInfo st_file_type_info = {
-        "crowbar.lang.file",
-        file_finalizer
+    "crowbar.lang.file",
+    file_finalizer
 };
 
 static void
@@ -95,7 +95,7 @@ nv_fopen_proc(CRB_Interpreter *interpreter,
                   (int)FOPEN_ARGUMENT_TYPE_ERR,
                   CRB_MESSAGE_ARGUMENT_END);
     }
-
+    
     filename = CRB_wcstombs_alloc(CRB_object_get_string(args[0].u.object));
     mode = CRB_wcstombs_alloc(CRB_object_get_string(args[1].u.object));
 
@@ -105,8 +105,8 @@ nv_fopen_proc(CRB_Interpreter *interpreter,
     } else {
         value.type = CRB_NATIVE_POINTER_VALUE;
         value.u.object
-                = CRB_create_native_pointer(interpreter, env, fp,
-                                            &st_file_type_info);
+            = CRB_create_native_pointer(interpreter, env, fp,
+                                        &st_file_type_info);
     }
     MEM_free(filename);
     MEM_free(mode);

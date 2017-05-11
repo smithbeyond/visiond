@@ -1,10 +1,5 @@
-/*
-* Created by 国海峰 on 17/4/29.
-* 面向crowbar用户的接口
-*/
-#ifndef VISIOND_CRB_H
-#define VISIOND_CRB_H
-
+#ifndef PUBLIC_CRB_H_INCLUDED
+#define PUBLIC_CRB_H_INCLUDED
 #include <stdio.h>
 
 typedef struct CRB_Interpreter_tag CRB_Interpreter;
@@ -22,5 +17,4 @@ void CRB_set_command_line_args(CRB_Interpreter *interpreter,
 void CRB_interpret(CRB_Interpreter *interpreter);
 void CRB_dispose_interpreter(CRB_Interpreter *interpreter);
 
-
-#endif /* VISIOND_CRB_H */
+#endif /* PUBLIC_CRB_H_INCLUDED */

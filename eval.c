@@ -9,13 +9,13 @@ push_value(CRB_Interpreter *inter, CRB_Value *value)
 {
     DBG_assert(inter->stack.stack_pointer <= inter->stack.stack_alloc_size,
                ("stack_pointer..%d, stack_alloc_size..%d\n",
-                       inter->stack.stack_pointer, inter->stack.stack_alloc_size));
+                inter->stack.stack_pointer, inter->stack.stack_alloc_size));
 
     if (inter->stack.stack_pointer == inter->stack.stack_alloc_size) {
         inter->stack.stack_alloc_size += STACK_ALLOC_SIZE;
         inter->stack.stack
-                = MEM_realloc(inter->stack.stack,
-                              sizeof(CRB_Value) * inter->stack.stack_alloc_size);
+            = MEM_realloc(inter->stack.stack,
+                          sizeof(CRB_Value) * inter->stack.stack_alloc_size);
     }
     inter->stack.stack[inter->stack.stack_pointer] = *value;
     inter->stack.stack_pointer++;
@@ -276,7 +276,7 @@ get_member_lvalue(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
 
 static CRB_Value *
 get_lvalue(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
-           Expression *expr)
+               Expression *expr)
 {
     CRB_Value   *dest;
 
@@ -314,72 +314,72 @@ eval_binary_int(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
     }
 
     switch (operator) {
-        case BOOLEAN_EXPRESSION:    /* FALLTHRU */
-        case INT_EXPRESSION:        /* FALLTHRU */
-        case DOUBLE_EXPRESSION:     /* FALLTHRU */
-        case STRING_EXPRESSION:     /* FALLTHRU */
-        case REGEXP_EXPRESSION:     /* FALLTHRU */
-        case IDENTIFIER_EXPRESSION: /* FALLTHRU */
-        case COMMA_EXPRESSION:      /* FALLTHRU */
-        case ASSIGN_EXPRESSION:
-            DBG_assert(0, ("bad case...%d", operator));
-            break;
-        case ADD_EXPRESSION:
-            result->u.int_value = left + right;
-            break;
-        case SUB_EXPRESSION:
-            result->u.int_value = left - right;
-            break;
-        case MUL_EXPRESSION:
-            result->u.int_value = left * right;
-            break;
-        case DIV_EXPRESSION:
-            if (right == 0) {
-                crb_runtime_error(inter, env, line_number, DIVISION_BY_ZERO_ERR,
-                                  CRB_MESSAGE_ARGUMENT_END);
-            }
-            result->u.int_value = left / right;
-            break;
-        case MOD_EXPRESSION:
-            if (right == 0) {
-                crb_runtime_error(inter, env, line_number, DIVISION_BY_ZERO_ERR,
-                                  CRB_MESSAGE_ARGUMENT_END);
-            }
-            result->u.int_value = left % right;
-            break;
-        case EQ_EXPRESSION:
-            result->u.boolean_value = left == right;
-            break;
-        case NE_EXPRESSION:
-            result->u.boolean_value = left != right;
-            break;
-        case GT_EXPRESSION:
-            result->u.boolean_value = left > right;
-            break;
-        case GE_EXPRESSION:
-            result->u.boolean_value = left >= right;
-            break;
-        case LT_EXPRESSION:
-            result->u.boolean_value = left < right;
-            break;
-        case LE_EXPRESSION:
-            result->u.boolean_value = left <= right;
-            break;
-        case LOGICAL_AND_EXPRESSION:        /* FALLTHRU */
-        case LOGICAL_OR_EXPRESSION: /* FALLTHRU */
-        case MINUS_EXPRESSION:      /* FALLTHRU */
-        case LOGICAL_NOT_EXPRESSION:        /* FALLTHRU */
-        case FUNCTION_CALL_EXPRESSION:      /* FALLTHRU */
-        case MEMBER_EXPRESSION:     /* FALLTHRU */
-        case NULL_EXPRESSION:       /* FALLTHRU */
-        case ARRAY_EXPRESSION:      /* FALLTHRU */
-        case CLOSURE_EXPRESSION:    /* FALLTHRU */
-        case INDEX_EXPRESSION:      /* FALLTHRU */
-        case INCREMENT_EXPRESSION:  /* FALLTHRU */
-        case DECREMENT_EXPRESSION:  /* FALLTHRU */
-        case EXPRESSION_TYPE_COUNT_PLUS_1:  /* FALLTHRU */
-        default:
-            DBG_assert(0, ("bad case...%d", operator));
+    case BOOLEAN_EXPRESSION:    /* FALLTHRU */
+    case INT_EXPRESSION:        /* FALLTHRU */
+    case DOUBLE_EXPRESSION:     /* FALLTHRU */
+    case STRING_EXPRESSION:     /* FALLTHRU */
+    case REGEXP_EXPRESSION:     /* FALLTHRU */
+    case IDENTIFIER_EXPRESSION: /* FALLTHRU */
+    case COMMA_EXPRESSION:      /* FALLTHRU */
+    case ASSIGN_EXPRESSION:
+        DBG_assert(0, ("bad case...%d", operator));
+        break;
+    case ADD_EXPRESSION:
+        result->u.int_value = left + right;
+        break;
+    case SUB_EXPRESSION:
+        result->u.int_value = left - right;
+        break;
+    case MUL_EXPRESSION:
+        result->u.int_value = left * right;
+        break;
+    case DIV_EXPRESSION:
+        if (right == 0) {
+            crb_runtime_error(inter, env, line_number, DIVISION_BY_ZERO_ERR,
+                              CRB_MESSAGE_ARGUMENT_END);
+        }
+        result->u.int_value = left / right;
+        break;
+    case MOD_EXPRESSION:
+        if (right == 0) {
+            crb_runtime_error(inter, env, line_number, DIVISION_BY_ZERO_ERR,
+                              CRB_MESSAGE_ARGUMENT_END);
+        }
+        result->u.int_value = left % right;
+        break;
+    case EQ_EXPRESSION:
+        result->u.boolean_value = left == right;
+        break;
+    case NE_EXPRESSION:
+        result->u.boolean_value = left != right;
+        break;
+    case GT_EXPRESSION:
+        result->u.boolean_value = left > right;
+        break;
+    case GE_EXPRESSION:
+        result->u.boolean_value = left >= right;
+        break;
+    case LT_EXPRESSION:
+        result->u.boolean_value = left < right;
+        break;
+    case LE_EXPRESSION:
+        result->u.boolean_value = left <= right;
+        break;
+    case LOGICAL_AND_EXPRESSION:        /* FALLTHRU */
+    case LOGICAL_OR_EXPRESSION: /* FALLTHRU */
+    case MINUS_EXPRESSION:      /* FALLTHRU */
+    case LOGICAL_NOT_EXPRESSION:        /* FALLTHRU */
+    case FUNCTION_CALL_EXPRESSION:      /* FALLTHRU */
+    case MEMBER_EXPRESSION:     /* FALLTHRU */
+    case NULL_EXPRESSION:       /* FALLTHRU */
+    case ARRAY_EXPRESSION:      /* FALLTHRU */
+    case CLOSURE_EXPRESSION:    /* FALLTHRU */
+    case INDEX_EXPRESSION:      /* FALLTHRU */
+    case INCREMENT_EXPRESSION:  /* FALLTHRU */
+    case DECREMENT_EXPRESSION:  /* FALLTHRU */
+    case EXPRESSION_TYPE_COUNT_PLUS_1:  /* FALLTHRU */
+    default:
+        DBG_assert(0, ("bad case...%d", operator));
     }
 }
 
@@ -402,64 +402,64 @@ eval_binary_double(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
     }
 
     switch (operator) {
-        case BOOLEAN_EXPRESSION:    /* FALLTHRU */
-        case INT_EXPRESSION:        /* FALLTHRU */
-        case DOUBLE_EXPRESSION:     /* FALLTHRU */
-        case STRING_EXPRESSION:     /* FALLTHRU */
-        case REGEXP_EXPRESSION:     /* FALLTHRU */
-        case IDENTIFIER_EXPRESSION: /* FALLTHRU */
-        case COMMA_EXPRESSION:      /* FALLTHRU */
-        case ASSIGN_EXPRESSION:
-            DBG_assert(0, ("bad case...%d", operator));
-            break;
-        case ADD_EXPRESSION:
-            result->u.double_value = left + right;
-            break;
-        case SUB_EXPRESSION:
-            result->u.double_value = left - right;
-            break;
-        case MUL_EXPRESSION:
-            result->u.double_value = left * right;
-            break;
-        case DIV_EXPRESSION:
-            result->u.double_value = left / right;
-            break;
-        case MOD_EXPRESSION:
-            result->u.double_value = fmod(left, right);
-            break;
-        case EQ_EXPRESSION:
-            result->u.boolean_value = left == right;
-            break;
-        case NE_EXPRESSION:
-            result->u.boolean_value = left != right;
-            break;
-        case GT_EXPRESSION:
-            result->u.boolean_value = left > right;
-            break;
-        case GE_EXPRESSION:
-            result->u.boolean_value = left >= right;
-            break;
-        case LT_EXPRESSION:
-            result->u.boolean_value = left < right;
-            break;
-        case LE_EXPRESSION:
-            result->u.boolean_value = left <= right;
-            break;
-        case LOGICAL_AND_EXPRESSION:        /* FALLTHRU */
-        case LOGICAL_OR_EXPRESSION:         /* FALLTHRU */
-        case MINUS_EXPRESSION:              /* FALLTHRU */
-        case LOGICAL_NOT_EXPRESSION:        /* FALLTHRU */
-        case FUNCTION_CALL_EXPRESSION:      /* FALLTHRU */
-        case MEMBER_EXPRESSION:     /* FALLTHRU */
-        case NULL_EXPRESSION:               /* FALLTHRU */
-        case ARRAY_EXPRESSION:      /* FALLTHRU */
-        case CLOSURE_EXPRESSION:    /* FALLTHRU */
-        case INDEX_EXPRESSION:      /* FALLTHRU */
-        case INCREMENT_EXPRESSION:
-        case DECREMENT_EXPRESSION:
-        case EXPRESSION_TYPE_COUNT_PLUS_1:  /* FALLTHRU */
-        default:
-            DBG_assert(0, ("bad default...%d", operator));
+    case BOOLEAN_EXPRESSION:    /* FALLTHRU */
+    case INT_EXPRESSION:        /* FALLTHRU */
+    case DOUBLE_EXPRESSION:     /* FALLTHRU */
+    case STRING_EXPRESSION:     /* FALLTHRU */
+    case REGEXP_EXPRESSION:     /* FALLTHRU */
+    case IDENTIFIER_EXPRESSION: /* FALLTHRU */
+    case COMMA_EXPRESSION:      /* FALLTHRU */
+    case ASSIGN_EXPRESSION:
+        DBG_assert(0, ("bad case...%d", operator));
+        break;
+    case ADD_EXPRESSION:
+        result->u.double_value = left + right;
+        break;
+    case SUB_EXPRESSION:
+        result->u.double_value = left - right;
+        break;
+    case MUL_EXPRESSION:
+        result->u.double_value = left * right;
+        break;
+    case DIV_EXPRESSION:
+        result->u.double_value = left / right;
+        break;
+    case MOD_EXPRESSION:
+        result->u.double_value = fmod(left, right);
+        break;
+    case EQ_EXPRESSION:
+        result->u.boolean_value = left == right;
+        break;
+    case NE_EXPRESSION:
+        result->u.boolean_value = left != right;
+        break;
+    case GT_EXPRESSION:
+        result->u.boolean_value = left > right;
+        break;
+    case GE_EXPRESSION:
+        result->u.boolean_value = left >= right;
+        break;
+    case LT_EXPRESSION:
+        result->u.boolean_value = left < right;
+        break;
+    case LE_EXPRESSION:
+        result->u.boolean_value = left <= right;
+        break;
+    case LOGICAL_AND_EXPRESSION:        /* FALLTHRU */
+    case LOGICAL_OR_EXPRESSION:         /* FALLTHRU */
+    case MINUS_EXPRESSION:              /* FALLTHRU */
+    case LOGICAL_NOT_EXPRESSION:        /* FALLTHRU */
+    case FUNCTION_CALL_EXPRESSION:      /* FALLTHRU */
+    case MEMBER_EXPRESSION:     /* FALLTHRU */
+    case NULL_EXPRESSION:               /* FALLTHRU */
+    case ARRAY_EXPRESSION:      /* FALLTHRU */
+    case CLOSURE_EXPRESSION:    /* FALLTHRU */
+    case INDEX_EXPRESSION:      /* FALLTHRU */
+    case INCREMENT_EXPRESSION:
+    case DECREMENT_EXPRESSION:
+    case EXPRESSION_TYPE_COUNT_PLUS_1:  /* FALLTHRU */
+    default:
+        DBG_assert(0, ("bad default...%d", operator));
     }
 }
 
@@ -509,7 +509,7 @@ chain_string(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
 
     result->type = CRB_STRING_VALUE;
     len = CRB_wcslen(left->u.object->u.string.string)
-          + CRB_wcslen(right_obj->u.string.string);
+        + CRB_wcslen(right_obj->u.string.string);
     str = MEM_malloc(sizeof(CRB_Char) * (len + 1));
     CRB_wcscpy(str, left->u.object->u.string.string);
     CRB_wcscat(str, right_obj->u.string.string);
@@ -528,25 +528,25 @@ do_assign(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
         *dest = *src;
     } else {
         switch (operator) {
-            case NORMAL_ASSIGN:
-                DBG_panic(("NORMAL_ASSIGN.\n"));
-            case ADD_ASSIGN:
-                expr_type = ADD_EXPRESSION;
-                break;
-            case SUB_ASSIGN:
-                expr_type = SUB_EXPRESSION;
-                break;
-            case MUL_ASSIGN:
-                expr_type = MUL_EXPRESSION;
-                break;
-            case DIV_ASSIGN:
-                expr_type = DIV_EXPRESSION;
-                break;
-            case MOD_ASSIGN:
-                expr_type = MOD_EXPRESSION;
-                break;
-            default:
-                DBG_panic(("bad default.\n"));
+        case NORMAL_ASSIGN:
+            DBG_panic(("NORMAL_ASSIGN.\n"));
+        case ADD_ASSIGN:
+            expr_type = ADD_EXPRESSION;
+            break;
+        case SUB_ASSIGN:
+            expr_type = SUB_EXPRESSION;
+            break;
+        case MUL_ASSIGN:
+            expr_type = MUL_EXPRESSION;
+            break;
+        case DIV_ASSIGN:
+            expr_type = DIV_EXPRESSION;
+            break;
+        case MOD_ASSIGN:
+            expr_type = MOD_EXPRESSION;
+            break;
+        default:
+            DBG_panic(("bad default.\n"));
         }
         if (dest->type == CRB_STRING_VALUE
             && expr_type == ADD_EXPRESSION) {
@@ -748,10 +748,10 @@ eval_binary_expression(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
                && right_val->type == CRB_BOOLEAN_VALUE) {
         result.type = CRB_BOOLEAN_VALUE;
         result.u.boolean_value
-                = eval_binary_boolean(inter, env, operator,
-                                      left_val->u.boolean_value,
-                                      right_val->u.boolean_value,
-                                      left->line_number);
+            = eval_binary_boolean(inter, env, operator,
+                                  left_val->u.boolean_value,
+                                  right_val->u.boolean_value,
+                                  left->line_number);
     } else if (left_val->type == CRB_STRING_VALUE
                && operator == ADD_EXPRESSION) {
         chain_string(inter, env, right->line_number,
@@ -760,19 +760,19 @@ eval_binary_expression(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
                && right_val->type == CRB_STRING_VALUE) {
         result.type = CRB_BOOLEAN_VALUE;
         result.u.boolean_value
-                = eval_compare_string(inter, env, operator, left_val, right_val,
-                                      left->line_number);
+            = eval_compare_string(inter, env, operator, left_val, right_val,
+                                  left->line_number);
     } else if (left_val->type == CRB_NULL_VALUE
                || right_val->type == CRB_NULL_VALUE) {
         result.type = CRB_BOOLEAN_VALUE;
         result.u.boolean_value
-                = eval_binary_null(inter, env, operator, left_val, right_val,
-                                   left->line_number);
+            = eval_binary_null(inter, env, operator, left_val, right_val,
+                               left->line_number);
     } else if (crb_is_object_value(left_val->type)
                && crb_is_object_value(right_val->type)) {
         result.type = CRB_BOOLEAN_VALUE;
         result.u.boolean_value
-                = (left_val->u.object == right_val->u.object);
+            = (left_val->u.object == right_val->u.object);
     } else {
         char *op_str = crb_get_operator_string(operator);
         crb_runtime_error(inter, env, left->line_number, BAD_OPERAND_TYPE_ERR,
@@ -828,7 +828,7 @@ eval_logical_and_or_expression(CRB_Interpreter *inter,
     right_val = pop_value(inter);
     result.u.boolean_value = right_val.u.boolean_value;
 
-    FUNC_END:
+  FUNC_END:
     push_value(inter, &result);
 }
 
@@ -939,7 +939,7 @@ call_crowbar_function(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
     CRB_ParameterList   *param_p;
 
     for (arg_p = expr->u.function_call_expression.argument,
-                 param_p = func->u.closure.function->u.crowbar_f.parameter;
+             param_p = func->u.closure.function->u.crowbar_f.parameter;
          arg_p;
 
          arg_p = arg_p->next, param_p = param_p->next) {
@@ -964,14 +964,14 @@ call_crowbar_function(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
 
     result = crb_execute_statement_list(inter, env,
                                         func->u.closure.function
-                                                ->u.crowbar_f.block->statement_list);
+                                        ->u.crowbar_f.block->statement_list);
 
     if (result.type == RETURN_STATEMENT_RESULT) {
         value = result.u.return_value;
     } else {
         value.type = CRB_NULL_VALUE;
     }
-
+    
     push_value(inter, &value);
 }
 
@@ -1098,7 +1098,7 @@ array_remove_method(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
 
 static void
 array_iterator_method(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
-                      CRB_Object *obj, CRB_Value *result)
+                    CRB_Object *obj, CRB_Value *result)
 {
     CRB_Value ret;
     CRB_Value array;
@@ -1141,20 +1141,20 @@ string_substr_method(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
     }
     result->type = CRB_STRING_VALUE;
     result->u.object
-            = crb_string_substr_i(inter, env, obj,
-                                  arg1->u.int_value, arg2->u.int_value,
-                                  __LINE__);
+        = crb_string_substr_i(inter, env, obj,
+                              arg1->u.int_value, arg2->u.int_value,
+                              __LINE__);
 }
 
 static FakeMethodTable st_fake_method_table[] = {
-        {ARRAY_OBJECT, "add", 1, array_add_method},
-        {ARRAY_OBJECT, "size", 0, array_size_method},
-        {ARRAY_OBJECT, "resize", 1, array_resize_method},
-        {ARRAY_OBJECT, "insert", 2, array_insert_method},
-        {ARRAY_OBJECT, "remove", 1, array_remove_method},
-        {ARRAY_OBJECT, "iterator", 0, array_iterator_method},
-        {STRING_OBJECT, "length", 0, string_length_method},
-        {STRING_OBJECT, "substr", 2, string_substr_method},
+    {ARRAY_OBJECT, "add", 1, array_add_method},
+    {ARRAY_OBJECT, "size", 0, array_size_method},
+    {ARRAY_OBJECT, "resize", 1, array_resize_method},
+    {ARRAY_OBJECT, "insert", 2, array_insert_method},
+    {ARRAY_OBJECT, "remove", 1, array_remove_method},
+    {ARRAY_OBJECT, "iterator", 0, array_iterator_method},
+    {STRING_OBJECT, "length", 0, string_length_method},
+    {STRING_OBJECT, "substr", 2, string_substr_method},
 };
 
 static FakeMethodTable *
@@ -1220,16 +1220,16 @@ do_function_call(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
     DBG_assert(func->type == CRB_CLOSURE_VALUE,
                ("func->type..%d\n", func->type));
     switch (func->u.closure.function->type) {
-        case CRB_CROWBAR_FUNCTION_DEFINITION:
-            call_crowbar_function(inter, env, caller_env, expr, func);
-            break;
-        case CRB_NATIVE_FUNCTION_DEFINITION:
-            call_native_function(inter, env, caller_env, expr,
-                                 func->u.closure.function->u.native_f.proc);
-            break;
-        case CRB_FUNCTION_DEFINITION_TYPE_COUNT_PLUS_1:
-        default:
-            DBG_assert(0, ("bad case..%d\n", func->u.closure.function->type));
+    case CRB_CROWBAR_FUNCTION_DEFINITION:
+        call_crowbar_function(inter, env, caller_env, expr, func);
+        break;
+    case CRB_NATIVE_FUNCTION_DEFINITION:
+        call_native_function(inter, env, caller_env, expr,
+                             func->u.closure.function->u.native_f.proc);
+        break;
+    case CRB_FUNCTION_DEFINITION_TYPE_COUNT_PLUS_1:
+    default:
+        DBG_assert(0, ("bad case..%d\n", func->u.closure.function->type));
     }
 
 }
@@ -1261,7 +1261,7 @@ eval_function_call_expression(CRB_Interpreter *inter,
                           NOT_FUNCTION_ERR,
                           CRB_MESSAGE_ARGUMENT_END);
     }
-
+    
     local_env = alloc_local_environment(inter, func_name, expr->line_number,
                                         closure_env);
     if (func->type == CRB_CLOSURE_VALUE
@@ -1304,7 +1304,7 @@ call_crowbar_function_from_native(CRB_Interpreter *inter,
     CRB_ParameterList   *param_p;
 
     for (arg_idx = 0,
-                 param_p = func->u.closure.function->u.crowbar_f.parameter;
+             param_p = func->u.closure.function->u.crowbar_f.parameter;
          arg_idx < arg_count;
          arg_idx++, param_p = param_p->next) {
         if (param_p == NULL) {
@@ -1323,14 +1323,14 @@ call_crowbar_function_from_native(CRB_Interpreter *inter,
 
     result = crb_execute_statement_list(inter, env,
                                         func->u.closure.function
-                                                ->u.crowbar_f.block->statement_list);
+                                        ->u.crowbar_f.block->statement_list);
 
     if (result.type == RETURN_STATEMENT_RESULT) {
         value = result.u.return_value;
     } else {
         value.type = CRB_NULL_VALUE;
     }
-
+    
     return value;
 }
 
@@ -1382,7 +1382,7 @@ call_fake_method_from_native(CRB_Interpreter *inter,
 }
 
 
-/*
+/* 
  * See also eval_function_call_expression().
  */
 CRB_Value
@@ -1407,7 +1407,7 @@ CRB_call_function(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
         DBG_panic(("func->type..%d\n", func->type));
     }
     local_env
-            = alloc_local_environment(inter, func_name, line_number, closure_env);
+        = alloc_local_environment(inter, func_name, line_number, closure_env);
     if (func->type == CRB_CLOSURE_VALUE
         && func->u.closure.function->is_closure
         && func->u.closure.function->name) {
@@ -1422,20 +1422,20 @@ CRB_call_function(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
     if (setjmp(inter->current_recovery_environment.environment) == 0) {
         if (func->type == CRB_CLOSURE_VALUE) {
             switch (func->u.closure.function->type) {
-                case CRB_CROWBAR_FUNCTION_DEFINITION:
-                    ret = call_crowbar_function_from_native(inter, local_env,
-                                                            line_number, env, func,
-                                                            arg_count, args);
-                    break;
-                case CRB_NATIVE_FUNCTION_DEFINITION:
-                    ret = call_native_function_from_native(inter, local_env,
-                                                           line_number, env,
-                                                           func, arg_count, args);
-                    break;
-                case CRB_FUNCTION_DEFINITION_TYPE_COUNT_PLUS_1:
-                default:
-                    DBG_assert(0, ("bad case..%d\n",
-                            func->u.closure.function->type));
+            case CRB_CROWBAR_FUNCTION_DEFINITION:
+                ret = call_crowbar_function_from_native(inter, local_env,
+                                                        line_number, env, func,
+                                                        arg_count, args);
+                break;
+            case CRB_NATIVE_FUNCTION_DEFINITION:
+                ret = call_native_function_from_native(inter, local_env,
+                                                       line_number, env,
+                                                       func, arg_count, args);
+                break;
+            case CRB_FUNCTION_DEFINITION_TYPE_COUNT_PLUS_1:
+            default:
+                DBG_assert(0, ("bad case..%d\n",
+                               func->u.closure.function->type));
             }
         } else if (func->type == CRB_FAKE_METHOD_VALUE) {
             ret = call_fake_method_from_native(inter, local_env,
@@ -1517,7 +1517,7 @@ eval_member_expression(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
 
     eval_expression(inter,env, expr->u.member_expression.expression);
     left = pop_value(inter);
-
+    
     if (left.type == CRB_ASSOC_VALUE) {
         CRB_Value *v;
         v = CRB_search_assoc_member(left.u.object,
@@ -1560,7 +1560,7 @@ eval_array_expression(CRB_Interpreter *inter,
     v.type = CRB_ARRAY_VALUE;
     v.u.object = crb_create_array_i(inter, size);
     push_value(inter, &v);
-
+    
     for (pos = list, i = 0; pos; pos = pos->next, i++) {
         eval_expression(inter, env, pos->expression);
         v.u.object->u.array.array[i] = pop_value(inter);
@@ -1585,7 +1585,7 @@ eval_inc_dec_expression(CRB_Interpreter *inter,
     CRB_Value   *operand;
     CRB_Value   result;
     int         old_value;
-
+    
     operand = get_lvalue(inter, env, expr->u.inc_dec.operand);
     if (operand == NULL) {
         crb_runtime_error(inter, env, expr->line_number,
@@ -1633,82 +1633,82 @@ eval_expression(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
                 Expression *expr)
 {
     switch (expr->type) {
-        case BOOLEAN_EXPRESSION:
-            eval_boolean_expression(inter, expr->u.boolean_value);
-            break;
-        case INT_EXPRESSION:
-            eval_int_expression(inter, expr->u.int_value);
-            break;
-        case DOUBLE_EXPRESSION:
-            eval_double_expression(inter, expr->u.double_value);
-            break;
-        case STRING_EXPRESSION:
-            eval_string_expression(inter, expr->u.string_value);
-            break;
-        case REGEXP_EXPRESSION:
-            eval_regexp_expression(inter, expr->u.regexp_value);
-            break;
-        case IDENTIFIER_EXPRESSION:
-            eval_identifier_expression(inter, env, expr);
-            break;
-        case COMMA_EXPRESSION:
-            eval_comma_expression(inter, env, expr);
-            break;
-        case ASSIGN_EXPRESSION:
-            eval_assign_expression(inter, env, expr);
-            break;
-        case ADD_EXPRESSION:        /* FALLTHRU */
-        case SUB_EXPRESSION:        /* FALLTHRU */
-        case MUL_EXPRESSION:        /* FALLTHRU */
-        case DIV_EXPRESSION:        /* FALLTHRU */
-        case MOD_EXPRESSION:        /* FALLTHRU */
-        case EQ_EXPRESSION: /* FALLTHRU */
-        case NE_EXPRESSION: /* FALLTHRU */
-        case GT_EXPRESSION: /* FALLTHRU */
-        case GE_EXPRESSION: /* FALLTHRU */
-        case LT_EXPRESSION: /* FALLTHRU */
-        case LE_EXPRESSION:
-            eval_binary_expression(inter, env, expr->type,
-                                   expr->u.binary_expression.left,
-                                   expr->u.binary_expression.right);
-            break;
-        case LOGICAL_AND_EXPRESSION:/* FALLTHRU */
-        case LOGICAL_OR_EXPRESSION: /* FALLTHRU */
-            eval_logical_and_or_expression(inter, env, expr->type,
-                                           expr->u.binary_expression.left,
-                                           expr->u.binary_expression.right);
-            break;
-        case MINUS_EXPRESSION:
-            eval_minus_expression(inter, env, expr->u.minus_expression);
-            break;
-        case LOGICAL_NOT_EXPRESSION:
-            eval_logical_not_expression(inter, env, expr->u.minus_expression);
-            break;
-        case FUNCTION_CALL_EXPRESSION:
-            eval_function_call_expression(inter, env, expr);
-            break;
-        case MEMBER_EXPRESSION:
-            eval_member_expression(inter, env, expr);
-            break;
-        case NULL_EXPRESSION:
-            eval_null_expression(inter);
-            break;
-        case ARRAY_EXPRESSION:
-            eval_array_expression(inter, env, expr->u.array_literal);
-            break;
-        case CLOSURE_EXPRESSION:
-            eval_closure_expression(inter, env, expr);
-            break;
-        case INDEX_EXPRESSION:
-            eval_index_expression(inter, env, expr);
-            break;
-        case INCREMENT_EXPRESSION:  /* FALLTHRU */
-        case DECREMENT_EXPRESSION:
-            eval_inc_dec_expression(inter, env, expr);
-            break;
-        case EXPRESSION_TYPE_COUNT_PLUS_1:  /* FALLTHRU */
-        default:
-            DBG_assert(0, ("bad case. type..%d\n", expr->type));
+    case BOOLEAN_EXPRESSION:
+        eval_boolean_expression(inter, expr->u.boolean_value);
+        break;
+    case INT_EXPRESSION:
+        eval_int_expression(inter, expr->u.int_value);
+        break;
+    case DOUBLE_EXPRESSION:
+        eval_double_expression(inter, expr->u.double_value);
+        break;
+    case STRING_EXPRESSION:
+        eval_string_expression(inter, expr->u.string_value);
+        break;
+    case REGEXP_EXPRESSION:
+        eval_regexp_expression(inter, expr->u.regexp_value);
+        break;
+    case IDENTIFIER_EXPRESSION:
+        eval_identifier_expression(inter, env, expr);
+        break;
+    case COMMA_EXPRESSION:
+        eval_comma_expression(inter, env, expr);
+        break;
+    case ASSIGN_EXPRESSION:
+        eval_assign_expression(inter, env, expr);
+        break;
+    case ADD_EXPRESSION:        /* FALLTHRU */
+    case SUB_EXPRESSION:        /* FALLTHRU */
+    case MUL_EXPRESSION:        /* FALLTHRU */
+    case DIV_EXPRESSION:        /* FALLTHRU */
+    case MOD_EXPRESSION:        /* FALLTHRU */
+    case EQ_EXPRESSION: /* FALLTHRU */
+    case NE_EXPRESSION: /* FALLTHRU */
+    case GT_EXPRESSION: /* FALLTHRU */
+    case GE_EXPRESSION: /* FALLTHRU */
+    case LT_EXPRESSION: /* FALLTHRU */
+    case LE_EXPRESSION:
+        eval_binary_expression(inter, env, expr->type,
+                               expr->u.binary_expression.left,
+                               expr->u.binary_expression.right);
+        break;
+    case LOGICAL_AND_EXPRESSION:/* FALLTHRU */
+    case LOGICAL_OR_EXPRESSION: /* FALLTHRU */
+        eval_logical_and_or_expression(inter, env, expr->type,
+                                       expr->u.binary_expression.left,
+                                       expr->u.binary_expression.right);
+        break;
+    case MINUS_EXPRESSION:
+        eval_minus_expression(inter, env, expr->u.minus_expression);
+        break;
+    case LOGICAL_NOT_EXPRESSION:
+        eval_logical_not_expression(inter, env, expr->u.minus_expression);
+        break;
+    case FUNCTION_CALL_EXPRESSION:
+        eval_function_call_expression(inter, env, expr);
+        break;
+    case MEMBER_EXPRESSION:
+        eval_member_expression(inter, env, expr);
+        break;
+    case NULL_EXPRESSION:
+        eval_null_expression(inter);
+        break;
+    case ARRAY_EXPRESSION:
+        eval_array_expression(inter, env, expr->u.array_literal);
+        break;
+    case CLOSURE_EXPRESSION:
+        eval_closure_expression(inter, env, expr);
+        break;
+    case INDEX_EXPRESSION:
+        eval_index_expression(inter, env, expr);
+        break;
+    case INCREMENT_EXPRESSION:  /* FALLTHRU */
+    case DECREMENT_EXPRESSION:
+        eval_inc_dec_expression(inter, env, expr);
+        break;
+    case EXPRESSION_TYPE_COUNT_PLUS_1:  /* FALLTHRU */
+    default:
+        DBG_assert(0, ("bad case. type..%d\n", expr->type));
     }
 }
 

@@ -360,9 +360,9 @@ crb_create_closure_definition(char *identifier,
 
     exp = crb_alloc_expression(CLOSURE_EXPRESSION);
     exp->u.closure.function_definition
-            = create_function_definition(identifier, parameter_list, CRB_TRUE,
-                                         block);
-
+        = create_function_definition(identifier, parameter_list, CRB_TRUE,
+                                     block);
+    
     return exp;
 }
 

@@ -1,11 +1,6 @@
-/**
- * Created by 国海峰 on 17/5/9.
- */
-
 #include <limits.h>
 #include "DBG.h"
 #include "crowbar.h"
-#include "onig-5.9.6/oniguruma.h"
 
 
 static OnigUChar *
@@ -15,7 +10,7 @@ encode_utf16_be(CRB_Char *src)
     int dest_size;
     int src_idx;
     int dest_idx;
-
+    
     dest_size = CRB_wcslen(src) * 2 + 2;
     dest = MEM_malloc(dest_size);
 
@@ -111,8 +106,8 @@ regexp_finalizer(CRB_Interpreter *inter, CRB_Object *obj)
 }
 
 static CRB_NativePointerInfo st_regexp_type_info = {
-        "crowbar.lang.regexp",
-        regexp_finalizer
+    "crowbar.lang.regexp",
+    regexp_finalizer
 };
 
 CRB_NativePointerInfo *
@@ -123,13 +118,13 @@ crb_get_regexp_info(void)
 
 static CRB_Boolean
 match_sub(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
-          regex_t *regexp, OnigUChar *subject,
-          OnigUChar *end_p, OnigUChar *at_p, OnigUChar **next_at,
-          OnigRegion *region_org)
+              regex_t *regexp, OnigUChar *subject,
+              OnigUChar *end_p, OnigUChar *at_p, OnigUChar **next_at,
+              OnigRegion *region_org)
 {
     int r;
     OnigRegion *region = NULL;
-
+    
     if (region_org == NULL && next_at != NULL) {
         region = onig_region_new();
     } else {
@@ -188,7 +183,7 @@ onig_region_to_crb_region(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
     CRB_push_value(inter, &string_val);
     stack_count++;
     CRB_add_assoc_member2(inter, crb_region, "string", &string_val);
-
+    
     for (i = 0; i < onig_region->num_regs; i++) {
         tmp_val.type = CRB_INT_VALUE;
         tmp_val.u.int_value = onig_region->beg[i] / 2;
@@ -200,11 +195,11 @@ onig_region_to_crb_region(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
 
         tmp_val.type = CRB_STRING_VALUE;
         tmp_val.u.object
-                =  crb_string_substr_i(inter, env, crb_subject,
-                                       onig_region->beg[i] / 2,
-                                       (onig_region->end[i]
-                                        - onig_region->beg[i])/2,
-                                       __LINE__);
+            =  crb_string_substr_i(inter, env, crb_subject,
+                                   onig_region->beg[i] / 2,
+                                   (onig_region->end[i]
+                                    - onig_region->beg[i])/2,
+                                   __LINE__);
         CRB_array_set(inter, env, string_val.u.object, i, &tmp_val);
     }
 
@@ -231,7 +226,7 @@ match_crb_if(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
         onig_region = onig_region_new();
     }
     end_p = subject
-            + onigenc_str_bytelen_null(ONIG_ENCODING_UTF16_BE, subject);
+        + onigenc_str_bytelen_null(ONIG_ENCODING_UTF16_BE, subject);
 
     matched = match_sub(inter, env, crb_reg->regexp, subject, end_p,
                         subject, NULL, onig_region);
@@ -253,8 +248,8 @@ nv_match_proc(CRB_Interpreter *inter,
               int arg_count, CRB_Value *args)
 {
     static CRB_ValueType arg_type[] = {
-            CRB_NATIVE_POINTER_VALUE,       /* pattern */
-            CRB_STRING_VALUE,               /* subject */
+        CRB_NATIVE_POINTER_VALUE,       /* pattern */
+        CRB_STRING_VALUE,               /* subject */
     };
     char *FUNC_NAME = "reg_match";
     CRB_Regexp *crb_reg;
@@ -281,14 +276,14 @@ nv_match_proc(CRB_Interpreter *inter,
                           CRB_STRING_MESSAGE_ARGUMENT,
                           "type",
                           CRB_get_native_pointer_type(args[0].u.object)
-                                  ->name,
+                          ->name,
                           CRB_MESSAGE_ARGUMENT_END);
     }
     crb_reg = CRB_object_get_native_pointer(args[0].u.object);
 
     result.type = CRB_BOOLEAN_VALUE;
     result.u.boolean_value
-            = match_crb_if(inter, env, crb_reg, args[1].u.object, region);
+        = match_crb_if(inter, env, crb_reg, args[1].u.object, region);
 
     return result;
 }
@@ -342,7 +337,7 @@ replace_matched_place(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
 
         scanf_result = sscanf(g_idx_str, "%d", &g_idx);
         DBG_assert(scanf_result == 1, ("sscanf failed. str..%s, result..%d",
-                g_idx_str, scanf_result));
+                                       g_idx_str, scanf_result));
         if (g_idx <= 0 || g_idx >= region->num_regs) {
             MEM_free(subject);
             MEM_free(vs->string);
@@ -356,7 +351,7 @@ replace_matched_place(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
         for (g_pos = region->beg[g_idx]; g_pos < region->end[g_idx];
              g_pos += 2) {
             crb_vstr_append_character(vs, (subject[g_pos] << 8)
-                                          + subject[g_pos+1]);
+                                      + subject[g_pos+1]);
         }
     }
 }
@@ -384,7 +379,7 @@ replace_crb_if(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
                           CRB_MESSAGE_ARGUMENT_END);
     }
     end_p = subject
-            + onigenc_str_bytelen_null(ONIG_ENCODING_UTF16_BE, subject);
+        + onigenc_str_bytelen_null(ONIG_ENCODING_UTF16_BE, subject);
     at_p = subject;
 
     region = onig_region_new();
@@ -399,7 +394,7 @@ replace_crb_if(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
         }
         for (i = at_p - subject; i < region->beg[0]; i += 2) {
             crb_vstr_append_character(&vs, (subject[i] << 8)
-                                           + subject[i+1]);
+                                      + subject[i+1]);
         }
         replace_matched_place(inter, env, replacement->u.string.string,
                               subject, region, &vs);
@@ -429,14 +424,14 @@ nv_replace_proc(CRB_Interpreter *inter,
                 int arg_count, CRB_Value *args)
 {
     static CRB_ValueType arg_type[] = {
-            CRB_NATIVE_POINTER_VALUE,       /* pattern */
-            CRB_STRING_VALUE,               /* replacement */
-            CRB_STRING_VALUE,               /* subject */
+        CRB_NATIVE_POINTER_VALUE,       /* pattern */
+        CRB_STRING_VALUE,               /* replacement */
+        CRB_STRING_VALUE,               /* subject */
     };
     char *FUNC_NAME = "reg_replace";
     CRB_Regexp *crb_reg;
     CRB_Value result;
-
+    
     CRB_check_argument(inter, env, arg_count, ARRAY_SIZE(arg_type),
                        args, arg_type, FUNC_NAME);
 
@@ -444,8 +439,8 @@ nv_replace_proc(CRB_Interpreter *inter,
 
     result.type = CRB_STRING_VALUE;
     result.u.object
-            = replace_crb_if(inter, env, crb_reg,
-                             args[1].u.object, args[2].u.object, 1);
+        = replace_crb_if(inter, env, crb_reg,
+                         args[1].u.object, args[2].u.object, 1);
 
     return result;
 }
@@ -456,14 +451,14 @@ nv_replace_all_proc(CRB_Interpreter *inter,
                     int arg_count, CRB_Value *args)
 {
     static CRB_ValueType arg_type[] = {
-            CRB_NATIVE_POINTER_VALUE,       /* pattern */
-            CRB_STRING_VALUE,               /* replacement */
-            CRB_STRING_VALUE,               /* subject */
+        CRB_NATIVE_POINTER_VALUE,       /* pattern */
+        CRB_STRING_VALUE,               /* replacement */
+        CRB_STRING_VALUE,               /* subject */
     };
     char *FUNC_NAME = "reg_replace_all";
     CRB_Regexp *crb_reg;
     CRB_Value result;
-
+    
     CRB_check_argument(inter, env, arg_count, ARRAY_SIZE(arg_type),
                        args, arg_type, FUNC_NAME);
 
@@ -471,8 +466,8 @@ nv_replace_all_proc(CRB_Interpreter *inter,
 
     result.type = CRB_STRING_VALUE;
     result.u.object
-            = replace_crb_if(inter, env, crb_reg,
-                             args[1].u.object, args[2].u.object, INT_MAX);
+        = replace_crb_if(inter, env, crb_reg,
+                         args[1].u.object, args[2].u.object, INT_MAX);
 
     return result;
 }
@@ -487,7 +482,7 @@ add_splitted_string(CRB_Interpreter *inter, CRB_Object *array, VString *vs)
     CRB_push_value(inter, &str);
 
     CRB_array_add(inter, array, &str);
-
+    
     CRB_pop_value(inter);
 }
 
@@ -510,7 +505,7 @@ split_crb_if(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
                           CRB_MESSAGE_ARGUMENT_END);
     }
     end_p = subject
-            + onigenc_str_bytelen_null(ONIG_ENCODING_UTF16_BE, subject);
+        + onigenc_str_bytelen_null(ONIG_ENCODING_UTF16_BE, subject);
     at_p = subject;
 
     region = onig_region_new();
@@ -520,7 +515,7 @@ split_crb_if(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
         crb_vstr_clear(&vs);
         for (i = at_p - subject; i < region->beg[0]; i += 2) {
             crb_vstr_append_character(&vs, (subject[i] << 8)
-                                           + subject[i+1]);
+                                      + subject[i+1]);
         }
         add_splitted_string(inter, result->u.object, &vs);
 
@@ -543,13 +538,13 @@ nv_split_proc(CRB_Interpreter *inter,
               int arg_count, CRB_Value *args)
 {
     static CRB_ValueType arg_type[] = {
-            CRB_NATIVE_POINTER_VALUE,       /* pattern */
-            CRB_STRING_VALUE,               /* subject */
+        CRB_NATIVE_POINTER_VALUE,       /* pattern */
+        CRB_STRING_VALUE,               /* subject */
     };
     char *FUNC_NAME = "reg_split";
     CRB_Regexp *crb_reg;
     CRB_Value result;
-
+    
     CRB_check_argument(inter, env, arg_count, ARRAY_SIZE(arg_type),
                        args, arg_type, FUNC_NAME);
 
@@ -558,7 +553,7 @@ nv_split_proc(CRB_Interpreter *inter,
     result.type = CRB_ARRAY_VALUE;
     result.u.object = crb_create_array_i(inter, 0);
     CRB_push_value(inter, &result);
-
+    
     split_crb_if(inter, env, crb_reg, args[1].u.object, &result);
     CRB_pop_value(inter);
 

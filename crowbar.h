@@ -1,10 +1,9 @@
 #ifndef PRIVATE_CROWBAR_H_INCLUDED
 #define PRIVATE_CROWBAR_H_INCLUDED
-
 #include <stdio.h>
 #include <setjmp.h>
 #include <wchar.h>
-#include "onig-5.9.6/oniguruma.h"
+#include <oniguruma.h>
 #include "MEM.h"
 #include "CRB.h"
 #include "CRB_dev.h"

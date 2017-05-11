@@ -1,7 +1,3 @@
-/**
- * Created by 国海峰 on 17/5/9.
- */
-
 #include <stdio.h>
 #include <string.h>
 #include <wchar.h>

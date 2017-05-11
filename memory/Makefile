@@ -1,5 +1,5 @@
 TARGET = mem.o
-CFLAGS = -c -g -DDEBUG -Wall -ansi -pedantic
+CFLAGS = -c -g -DDEBUG -Wall
 OBJS = memory.o storage.o
 
 $(TARGET):$(OBJS)

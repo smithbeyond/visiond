@@ -1,6 +1,3 @@
-/*
-** Created by 国海峰 on 17/5/9.
-*/
 #include <stdio.h>
 #include <string.h>
 #include "MEM.h"
@@ -19,7 +16,7 @@ check_gc(CRB_Interpreter *inter)
         /* fprintf(stderr, "done.\n"); */
 
         inter->heap.current_threshold
-                = inter->heap.current_heap_size + HEAP_THRESHOLD_SIZE;
+            = inter->heap.current_heap_size + HEAP_THRESHOLD_SIZE;
     }
 }
 
@@ -175,7 +172,7 @@ CRB_array_resize(CRB_Interpreter *inter, CRB_Object *obj, int new_size)
     int i;
 
     check_gc(inter);
-
+    
     if (new_size > obj->u.array.alloc_size) {
         new_alloc_size = obj->u.array.alloc_size * 2;
         if (new_alloc_size < new_size) {
@@ -196,7 +193,7 @@ CRB_array_resize(CRB_Interpreter *inter, CRB_Object *obj, int new_size)
         obj->u.array.array = MEM_realloc(obj->u.array.array,
                                          new_alloc_size * sizeof(CRB_Value));
         inter->heap.current_heap_size
-                += (new_alloc_size - obj->u.array.alloc_size) * sizeof(CRB_Value);
+            += (new_alloc_size - obj->u.array.alloc_size) * sizeof(CRB_Value);
         obj->u.array.alloc_size = new_alloc_size;
     }
     for (i = obj->u.array.size; i < new_size; i++) {
@@ -512,8 +509,8 @@ print_stack_trace(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
         assoc = stack_trace->u.object->u.array.array[i].u.object;
 
         line_number
-                = CRB_search_assoc_member(assoc,
-                                          EXCEPTION_MEMBER_LINE_NUMBER);
+            = CRB_search_assoc_member(assoc,
+                                      EXCEPTION_MEMBER_LINE_NUMBER);
         if (line_number == NULL
             || line_number->type != CRB_INT_VALUE) {
             crb_runtime_error(inter, env, __LINE__,
@@ -521,8 +518,8 @@ print_stack_trace(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
                               CRB_MESSAGE_ARGUMENT_END);
         }
         function_name
-                = CRB_search_assoc_member(assoc,
-                                          EXCEPTION_MEMBER_FUNCTION_NAME);
+            = CRB_search_assoc_member(assoc,
+                                      EXCEPTION_MEMBER_FUNCTION_NAME);
         if (function_name == NULL
             || function_name->type != CRB_STRING_VALUE) {
             crb_runtime_error(inter, env, __LINE__,
@@ -534,7 +531,7 @@ print_stack_trace(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
                                   function_name);
         CRB_print_wcs(stderr, str);
         MEM_free(str);
-
+            
         fprintf(stderr, " at ");
 
         str = CRB_value_to_string(inter, NULL,
@@ -542,7 +539,7 @@ print_stack_trace(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
         CRB_print_wcs_ln(stderr, str);
         MEM_free(str);
     }
-
+    
     ret.type = CRB_NULL_VALUE;
     return ret;
 }
@@ -603,7 +600,7 @@ CRB_create_exception(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
                       &value);
         next_line_number = env_pos->caller_line_number;
     }
-
+    
     line = create_stack_trace_line(inter, env, "top_level",
                                    next_line_number);
     value.type = CRB_ASSOC_VALUE;
@@ -708,11 +705,11 @@ gc_mark_objects(CRB_Interpreter *inter)
     for (obj = inter->heap.header; obj; obj = obj->next) {
         gc_reset_mark(obj);
     }
-
+    
     for (v = inter->variable; v; v = v->next) {
         gc_mark_value(&v->value);
     }
-
+    
     for (lv = inter->top_environment; lv; lv = lv->next) {
         gc_mark(lv->variable);
         gc_mark_ref_in_native_method(lv);
@@ -729,33 +726,33 @@ static void
 gc_dispose_object(CRB_Interpreter *inter, CRB_Object *obj)
 {
     switch (obj->type) {
-        case ARRAY_OBJECT:
+    case ARRAY_OBJECT:
+        inter->heap.current_heap_size
+            -= sizeof(CRB_Value) * obj->u.array.alloc_size;
+        MEM_free(obj->u.array.array);
+        break;
+    case STRING_OBJECT:
+        if (!obj->u.string.is_literal) {
             inter->heap.current_heap_size
-                    -= sizeof(CRB_Value) * obj->u.array.alloc_size;
-            MEM_free(obj->u.array.array);
-            break;
-        case STRING_OBJECT:
-            if (!obj->u.string.is_literal) {
-                inter->heap.current_heap_size
-                        -= sizeof(CRB_Char) * (CRB_wcslen(obj->u.string.string) + 1);
-                MEM_free(obj->u.string.string);
-            }
-            break;
-        case ASSOC_OBJECT:
-            inter->heap.current_heap_size
-                    -= sizeof(AssocMember) * obj->u.assoc.member_count;
-            MEM_free(obj->u.assoc.member);
-            break;
-        case SCOPE_CHAIN_OBJECT:
-            break;
-        case NATIVE_POINTER_OBJECT:
-            if (obj->u.native_pointer.info->finalizer) {
-                obj->u.native_pointer.info->finalizer(inter, obj);
-            }
-            break;
-        case OBJECT_TYPE_COUNT_PLUS_1:
-        default:
-            DBG_assert(0, ("bad type..%d\n", obj->type));
+                -= sizeof(CRB_Char) * (CRB_wcslen(obj->u.string.string) + 1);
+            MEM_free(obj->u.string.string);
+        }
+        break;
+    case ASSOC_OBJECT:
+        inter->heap.current_heap_size
+            -= sizeof(AssocMember) * obj->u.assoc.member_count;
+        MEM_free(obj->u.assoc.member);
+        break;
+    case SCOPE_CHAIN_OBJECT:
+        break;
+    case NATIVE_POINTER_OBJECT:
+        if (obj->u.native_pointer.info->finalizer) {
+            obj->u.native_pointer.info->finalizer(inter, obj);
+        }
+        break;
+    case OBJECT_TYPE_COUNT_PLUS_1:
+    default:
+        DBG_assert(0, ("bad type..%d\n", obj->type));
     }
     inter->heap.current_heap_size -= sizeof(CRB_Object);
     MEM_free(obj);

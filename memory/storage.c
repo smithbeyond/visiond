@@ -1,6 +1,3 @@
-/*
-** Created by 国海峰 on 17/4/30.
-*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>

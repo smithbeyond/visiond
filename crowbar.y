@@ -53,7 +53,7 @@ translation_unit
         ;
 definition_or_statement
         : function_definition
-        | statement  /* 当statement左边没有 {（LC：左大括号）时候，就会执行这里的规约条件，代表这个一个单独的语句 */
+        | statement
         {
             CRB_Interpreter *inter = crb_get_current_interpreter();
 
@@ -61,54 +61,54 @@ definition_or_statement
                 = crb_chain_statement_list(inter->statement_list, $1);
         }
         ;
-function_definition  /* 定义函数，以function字符串开头的，函数定义语句 */
-        : FUNCTION IDENTIFIER LP parameter_list RP block  /* 带参数的函数 */
+function_definition
+        : FUNCTION IDENTIFIER LP parameter_list RP block
         {
-            crb_function_define($2, $4, $6);  /* 存入解释器中的function_list当中，无返回值 */
+            crb_function_define($2, $4, $6);
         }
-        | FUNCTION IDENTIFIER LP RP block  /* 不带参数的函数 */
+        | FUNCTION IDENTIFIER LP RP block
         {
-            crb_function_define($2, NULL, $5);  /* 存入解释器中的function_list当中 */
+            crb_function_define($2, NULL, $5);
         }
         ;
-parameter_list  /* 参数名列表：声明一个函数时，存储函数的参数名，属于函数本身的一部分，无返回值 */
-        : IDENTIFIER  /* 只有一个参数名 */
+parameter_list
+        : IDENTIFIER
         {
             $$ = crb_create_parameter($1);
         }
-        | parameter_list COMMA IDENTIFIER  /* 多个参数名 */
+        | parameter_list COMMA IDENTIFIER
         {
             $$ = crb_chain_parameter($1, $3);
         }
         ;
-argument_list  /* 参数值列表：与函数有关，存储传给函数的参数值 */
-        : expression  /* 单个参数值 */
+argument_list
+        : assignment_expression
         {
             $$ = crb_create_argument_list($1);
         }
-        | argument_list COMMA expression  /* 多个参数值 */
+        | argument_list COMMA assignment_expression
         {
             $$ = crb_chain_argument_list($1, $3);
         }
         ;
-statement_list  /* 程序语句链，用于block的语句存储，当statement左边为 {（LC: 左大括号）时，statement会规约到statement_list */
-        : statement  /* 程序语句：都是以;分号结尾 */
+statement_list
+        : statement
         {
-            $$ = crb_create_statement_list($1);  /* 第一个程序语句，所以创建一个新的程序语句列表 */
+            $$ = crb_create_statement_list($1);
         }
         | statement_list statement
         {
-            $$ = crb_chain_statement_list($1, $2);  /* 链入已有的程序语句链 */
+            $$ = crb_chain_statement_list($1, $2);
         }
         ;
-expression  /* = (赋值运算) */
+expression
         : assignment_expression
         | expression COMMA assignment_expression
         {
             $$ = crb_create_comma_expression($1, $3);
         }
         ;
-assignment_expression  /* = (赋值运算)，如：value = expression */
+assignment_expression
         : logical_or_expression
         | postfix_expression assignment_operator assignment_expression
         {
@@ -145,21 +145,21 @@ assignment_operator
             $$ = MOD_ASSIGN;
         }
         ;
-logical_or_expression  /* 逻辑 或 运算（ || ） */
+logical_or_expression
         : logical_and_expression
         | logical_or_expression LOGICAL_OR logical_and_expression
         {
             $$ = crb_create_binary_expression(LOGICAL_OR_EXPRESSION, $1, $3);
         }
         ;
-logical_and_expression  /* 逻辑与运算（&& 高于 ||） */
+logical_and_expression
         : equality_expression
         | logical_and_expression LOGICAL_AND equality_expression
         {
             $$ = crb_create_binary_expression(LOGICAL_AND_EXPRESSION, $1, $3);
         }
         ;
-equality_expression  /* 判断相等，一般返回true, false */
+equality_expression
         : relational_expression
         | equality_expression EQ relational_expression
         {
@@ -170,26 +170,26 @@ equality_expression  /* 判断相等，一般返回true, false */
             $$ = crb_create_binary_expression(NE_EXPRESSION, $1, $3);
         }
         ;
-relational_expression  /* 比较运算 */
+relational_expression
         : additive_expression
-        | relational_expression GT additive_expression  /* > (大于) 比较运算*/
+        | relational_expression GT additive_expression
         {
             $$ = crb_create_binary_expression(GT_EXPRESSION, $1, $3);
         }
-        | relational_expression GE additive_expression  /* >= (大于等于) */
+        | relational_expression GE additive_expression
         {
             $$ = crb_create_binary_expression(GE_EXPRESSION, $1, $3);
         }
-        | relational_expression LT additive_expression  /* < (小于) */
+        | relational_expression LT additive_expression
         {
             $$ = crb_create_binary_expression(LT_EXPRESSION, $1, $3);
         }
-        | relational_expression LE additive_expression  /* <= (小于等于) */
+        | relational_expression LE additive_expression
         {
             $$ = crb_create_binary_expression(LE_EXPRESSION, $1, $3);
         }
         ;
-additive_expression  /* 加, 减 运算 */
+additive_expression
         : multiplicative_expression
         | additive_expression ADD multiplicative_expression
         {
@@ -200,7 +200,7 @@ additive_expression  /* 加, 减 运算 */
             $$ = crb_create_binary_expression(SUB_EXPRESSION, $1, $3);
         }
         ;
-multiplicative_expression  /* 乘, 除, 取模 运算 */
+multiplicative_expression
         : unary_expression
         | multiplicative_expression MUL unary_expression
         {
@@ -217,7 +217,7 @@ multiplicative_expression  /* 乘, 除, 取模 运算 */
         ;
 unary_expression
         : postfix_expression
-        | SUB unary_expression  /* 变负数 */
+        | SUB unary_expression
         {
             $$ = crb_create_minus_expression($2);
         }
@@ -226,7 +226,7 @@ unary_expression
             $$ = crb_create_logical_not_expression($2);
         }
         ;
-postfix_expression  /* 支持数组和字符串引用 */
+postfix_expression
         : primary_expression
         | postfix_expression LB expression RB
         {
@@ -254,7 +254,7 @@ postfix_expression  /* 支持数组和字符串引用 */
         }
         ;
 primary_expression
-        : LP expression RP    /* 单独的调用函数(不带参数) */
+        : LP expression RP
         {
             $$ = $2;
         }
@@ -262,7 +262,7 @@ primary_expression
         {
             $$ = crb_create_identifier_expression($1);
         }
-        | INT_LITERAL  /* 单数的一个标识符 */
+        | INT_LITERAL
         | DOUBLE_LITERAL
         | STRING_LITERAL
         | REGEXP_LITERAL
@@ -281,7 +281,7 @@ primary_expression
         | array_literal
         | closure_definition
         ;
-array_literal  /* 用于array数组 */
+array_literal
         : LC expression_list RC
         {
             $$ = crb_create_array_expression($2);
@@ -309,7 +309,7 @@ closure_definition
             $$ = crb_create_closure_definition(NULL, NULL, $4);
         }
         ;
-expression_list  /* 主要用于数组的声明时候，以逗号分隔 */
+expression_list
         : /* empty */
         {
             $$ = NULL;
@@ -324,29 +324,29 @@ expression_list  /* 主要用于数组的声明时候，以逗号分隔 */
         }
         ;
 statement
-        : expression SEMICOLON  /* expression; （以;分号结尾，作为一个语句的结束符号） */
+        : expression SEMICOLON
         {
           $$ = crb_create_expression_statement($1);
         }
-        | global_statement    /*   以特殊字符串 global 开头的语句   */
-        | if_statement        /*   以特殊字符串 if 开头的语句       */
-        | while_statement     /*   以特殊字符串 while 开头的语句    */
-        | for_statement       /*   以特殊字符串 for 开头的语句      */
+        | global_statement
+        | if_statement
+        | while_statement
+        | for_statement
         | foreach_statement
-        | return_statement    /*   以特殊字符串 return 开头的语句   */
-        | break_statement     /*   以特殊字符串 break 开头的语句    */
-        | continue_statement  /*   以特殊字符串 continue 开头的语句 */
+        | return_statement
+        | break_statement
+        | continue_statement
         | try_statement
         | throw_statement
         ;
 global_statement
-        : GLOBAL_T identifier_list SEMICOLON   /* 如：global name1, name2, name3; */
+        : GLOBAL_T identifier_list SEMICOLON
         {
             $$ = crb_create_global_statement($2);
         }
         ;
-identifier_list  /* identifier_list 主要是用于 global 变量类型 的使用 */
-        : IDENTIFIER  /* 当 IDENTIFIER 遇到 ,（COMMA：逗号）时候，会 规约到 identifier_list */
+identifier_list
+        : IDENTIFIER
         {
             $$ = crb_create_global_identifier($1);
         }
@@ -435,7 +435,7 @@ identifier_opt
         }
         | IDENTIFIER
         ;
-break_statement
+break_statement 
         : BREAK identifier_opt SEMICOLON
         {
             $$ = crb_create_break_statement($2);

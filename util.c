@@ -1,7 +1,3 @@
-/*
-** Created by 国海峰 on 17/4/30.
-*/
-
 #include <stdio.h>
 #include <string.h>
 #include "MEM.h"
@@ -199,76 +195,76 @@ crb_get_operator_string(ExpressionType type)
     char        *str;
 
     switch (type) {
-        case BOOLEAN_EXPRESSION:    /* FALLTHRU */
-        case INT_EXPRESSION:        /* FALLTHRU */
-        case DOUBLE_EXPRESSION:     /* FALLTHRU */
-        case STRING_EXPRESSION:     /* FALLTHRU */
-        case REGEXP_EXPRESSION:     /* FALLTHRU */
-        case IDENTIFIER_EXPRESSION:
-            DBG_assert(0, ("bad expression type..%d\n", type));
-            break;
-        case COMMA_EXPRESSION:
-            str = ",";
-            break;
-        case ASSIGN_EXPRESSION:
-            str = "=";
-            break;
-        case ADD_EXPRESSION:
-            str = "+";
-            break;
-        case SUB_EXPRESSION:
-            str = "-";
-            break;
-        case MUL_EXPRESSION:
-            str = "*";
-            break;
-        case DIV_EXPRESSION:
-            str = "/";
-            break;
-        case MOD_EXPRESSION:
-            str = "%";
-            break;
-        case EQ_EXPRESSION:
-            str = "==";
-            break;
-        case NE_EXPRESSION:
-            str = "!=";
-            break;
-        case GT_EXPRESSION:
-            str = "<";
-            break;
-        case GE_EXPRESSION:
-            str = "<=";
-            break;
-        case LT_EXPRESSION:
-            str = ">";
-            break;
-        case LE_EXPRESSION:
-            str = ">=";
-            break;
-        case LOGICAL_AND_EXPRESSION:
-            str = "&&";
-            break;
-        case LOGICAL_OR_EXPRESSION:
-            str = "||";
-            break;
-        case MINUS_EXPRESSION:
-            str = "-";
-            break;
-        case LOGICAL_NOT_EXPRESSION:
-            str = "!";
-            break;
-        case FUNCTION_CALL_EXPRESSION:      /* FALLTHRU */
-        case MEMBER_EXPRESSION:     /* FALLTHRU */
-        case NULL_EXPRESSION:       /* FALLTHRU */
-        case ARRAY_EXPRESSION:      /* FALLTHRU */
-        case INDEX_EXPRESSION:      /* FALLTHRU */
-        case INCREMENT_EXPRESSION:  /* FALLTHRU */
-        case DECREMENT_EXPRESSION:  /* FALLTHRU */
-        case CLOSURE_EXPRESSION:    /* FALLTHRU */
-        case EXPRESSION_TYPE_COUNT_PLUS_1:  /* FALLTHRU */
-        default:
-            DBG_assert(0, ("bad expression type..%d\n", type));
+    case BOOLEAN_EXPRESSION:    /* FALLTHRU */
+    case INT_EXPRESSION:        /* FALLTHRU */
+    case DOUBLE_EXPRESSION:     /* FALLTHRU */
+    case STRING_EXPRESSION:     /* FALLTHRU */
+    case REGEXP_EXPRESSION:     /* FALLTHRU */
+    case IDENTIFIER_EXPRESSION:
+        DBG_assert(0, ("bad expression type..%d\n", type));
+        break;
+    case COMMA_EXPRESSION:
+        str = ",";
+        break;
+    case ASSIGN_EXPRESSION:
+        str = "=";
+        break;
+    case ADD_EXPRESSION:
+        str = "+";
+        break;
+    case SUB_EXPRESSION:
+        str = "-";
+        break;
+    case MUL_EXPRESSION:
+        str = "*";
+        break;
+    case DIV_EXPRESSION:
+        str = "/";
+        break;
+    case MOD_EXPRESSION:
+        str = "%";
+        break;
+    case EQ_EXPRESSION:
+        str = "==";
+        break;
+    case NE_EXPRESSION:
+        str = "!=";
+        break;
+    case GT_EXPRESSION:
+        str = "<";
+        break;
+    case GE_EXPRESSION:
+        str = "<=";
+        break;
+    case LT_EXPRESSION:
+        str = ">";
+        break;
+    case LE_EXPRESSION:
+        str = ">=";
+        break;
+    case LOGICAL_AND_EXPRESSION:
+        str = "&&";
+        break;
+    case LOGICAL_OR_EXPRESSION:
+        str = "||";
+        break;
+    case MINUS_EXPRESSION:
+        str = "-";
+        break;
+    case LOGICAL_NOT_EXPRESSION:
+        str = "!";
+        break;
+    case FUNCTION_CALL_EXPRESSION:      /* FALLTHRU */
+    case MEMBER_EXPRESSION:     /* FALLTHRU */
+    case NULL_EXPRESSION:       /* FALLTHRU */
+    case ARRAY_EXPRESSION:      /* FALLTHRU */
+    case INDEX_EXPRESSION:      /* FALLTHRU */
+    case INCREMENT_EXPRESSION:  /* FALLTHRU */
+    case DECREMENT_EXPRESSION:  /* FALLTHRU */
+    case CLOSURE_EXPRESSION:    /* FALLTHRU */
+    case EXPRESSION_TYPE_COUNT_PLUS_1:  /* FALLTHRU */
+    default:
+        DBG_assert(0, ("bad expression type..%d\n", type));
     }
 
     return str;
@@ -278,41 +274,41 @@ char *
 CRB_get_type_name(CRB_ValueType type)
 {
     switch (type) {
-        case CRB_BOOLEAN_VALUE:
-            return "boolean";
-            break;
-        case CRB_INT_VALUE:
-            return "int";
-            break;
-        case CRB_DOUBLE_VALUE:
-            return "dobule";
-            break;
-        case CRB_STRING_VALUE:
-            return "string";
-            break;
-        case CRB_NATIVE_POINTER_VALUE:
-            return "native pointer";
-            break;
-        case CRB_NULL_VALUE:
-            return "null";
-            break;
-        case CRB_ARRAY_VALUE:
-            return "array";
-            break;
-        case CRB_ASSOC_VALUE:
-            return "object";
-            break;
-        case CRB_CLOSURE_VALUE:
-            return "closure";
-            break;
-        case CRB_FAKE_METHOD_VALUE:
-            return "method";
-            break;
-        case CRB_SCOPE_CHAIN_VALUE:
-            return "scope chain";
-            break;
-        default:
-            DBG_panic(("bad type..%d\n", type));
+    case CRB_BOOLEAN_VALUE:
+        return "boolean";
+        break;
+    case CRB_INT_VALUE:
+        return "int";
+        break;
+    case CRB_DOUBLE_VALUE:
+        return "dobule";
+        break;
+    case CRB_STRING_VALUE:
+        return "string";
+        break;
+    case CRB_NATIVE_POINTER_VALUE:
+        return "native pointer";
+        break;
+    case CRB_NULL_VALUE:
+        return "null";
+        break;
+    case CRB_ARRAY_VALUE:
+        return "array";
+        break;
+    case CRB_ASSOC_VALUE:
+        return "object";
+        break;
+    case CRB_CLOSURE_VALUE:
+        return "closure";
+        break;
+    case CRB_FAKE_METHOD_VALUE:
+        return "method";
+        break;
+    case CRB_SCOPE_CHAIN_VALUE:
+        return "scope chain";
+        break;
+    default:
+        DBG_panic(("bad type..%d\n", type));
     }
     return NULL; /* make compiler happy */
 }
@@ -321,19 +317,19 @@ char*
 CRB_get_object_type_name(CRB_Object *obj)
 {
     switch (obj->type) {
-        case ARRAY_OBJECT:
-            return "array";
-        case STRING_OBJECT:
-            return "string";
-        case ASSOC_OBJECT:
-            return "object";
-        case SCOPE_CHAIN_OBJECT:
-            return "scope chain";
-        case NATIVE_POINTER_OBJECT:
-            return "native pointer";
-        case OBJECT_TYPE_COUNT_PLUS_1: /* FALLTHRU */
-        default:
-            DBG_assert(0, ("bad object type..%d\n", obj->type));
+    case ARRAY_OBJECT:
+        return "array";
+    case STRING_OBJECT:
+        return "string";
+    case ASSOC_OBJECT:
+        return "object";
+    case SCOPE_CHAIN_OBJECT:
+        return "scope chain";
+    case NATIVE_POINTER_OBJECT:
+        return "native pointer";
+    case OBJECT_TYPE_COUNT_PLUS_1: /* FALLTHRU */
+    default:
+        DBG_assert(0, ("bad object type..%d\n", obj->type));
     }
 
     return NULL; /* make compiler happy */
@@ -370,7 +366,7 @@ void
 crb_vstr_append_character(VString *v, CRB_Char ch)
 {
     int current_len;
-
+    
     current_len = my_strlen(v->string);
     v->string = MEM_realloc(v->string,sizeof(CRB_Char) * (current_len + 2));
     v->string[current_len] = ch;
@@ -389,117 +385,117 @@ CRB_value_to_string(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
     crb_vstr_clear(&vstr);
 
     switch (value->type) {
-        case CRB_BOOLEAN_VALUE:
-            if (value->u.boolean_value) {
-                CRB_mbstowcs("true", wc_buf);
-            } else {
-                CRB_mbstowcs("false", wc_buf);
+    case CRB_BOOLEAN_VALUE:
+        if (value->u.boolean_value) {
+            CRB_mbstowcs("true", wc_buf);
+        } else {
+            CRB_mbstowcs("false", wc_buf);
+        }
+        crb_vstr_append_string(&vstr, wc_buf);
+        break;
+    case CRB_INT_VALUE:
+        sprintf(buf, "%d", value->u.int_value);
+        CRB_mbstowcs(buf, wc_buf);
+        crb_vstr_append_string(&vstr, wc_buf);
+        break;
+    case CRB_DOUBLE_VALUE:
+        sprintf(buf, "%f", value->u.double_value);
+        CRB_mbstowcs(buf, wc_buf);
+        crb_vstr_append_string(&vstr, wc_buf);
+        break;
+    case CRB_STRING_VALUE:
+        crb_vstr_append_string(&vstr, value->u.object->u.string.string);
+        break;
+    case CRB_NATIVE_POINTER_VALUE:
+        sprintf(buf, "%s(%p)", value->u.object->u.native_pointer.info->name,
+                value->u.object->u.native_pointer.pointer);
+        CRB_mbstowcs(buf, wc_buf);
+        crb_vstr_append_string(&vstr, wc_buf);
+        break;
+    case CRB_NULL_VALUE:
+        CRB_mbstowcs("null", wc_buf);
+        crb_vstr_append_string(&vstr, wc_buf);
+        break;
+    case CRB_ARRAY_VALUE:
+        CRB_mbstowcs("(", wc_buf);
+        crb_vstr_append_string(&vstr, wc_buf);
+        for (i = 0; i < value->u.object->u.array.size; i++) {
+            CRB_Char *new_str;
+            if (i > 0) {
+                CRB_mbstowcs(", ", wc_buf);
+                crb_vstr_append_string(&vstr, wc_buf);
             }
+            new_str = CRB_value_to_string(inter, env, line_number,
+                                          &value->u.object->u.array.array[i]);
+            crb_vstr_append_string(&vstr, new_str);
+            MEM_free(new_str);
+        }
+        CRB_mbstowcs(")", wc_buf);
+        crb_vstr_append_string(&vstr, wc_buf);
+        break;
+    case CRB_ASSOC_VALUE:
+        CRB_mbstowcs("(", wc_buf);
+        crb_vstr_append_string(&vstr, wc_buf);
+        for (i = 0; i < value->u.object->u.assoc.member_count; i++) {
+            CRB_Char *new_str;
+            if (i > 0) {
+                CRB_mbstowcs(", ", wc_buf);
+                crb_vstr_append_string(&vstr, wc_buf);
+            }
+            new_str
+                = CRB_mbstowcs_alloc(inter, env, line_number,
+                                     value->u.object->u.assoc.member[i].name);
+            DBG_assert(new_str != NULL, ("new_str is null.\n"));
+            crb_vstr_append_string(&vstr, new_str);
+            MEM_free(new_str);
+
+            CRB_mbstowcs("=>", wc_buf);
             crb_vstr_append_string(&vstr, wc_buf);
-            break;
-        case CRB_INT_VALUE:
-            sprintf(buf, "%d", value->u.int_value);
-            CRB_mbstowcs(buf, wc_buf);
-            crb_vstr_append_string(&vstr, wc_buf);
-            break;
-        case CRB_DOUBLE_VALUE:
-            sprintf(buf, "%f", value->u.double_value);
-            CRB_mbstowcs(buf, wc_buf);
-            crb_vstr_append_string(&vstr, wc_buf);
-            break;
-        case CRB_STRING_VALUE:
-            crb_vstr_append_string(&vstr, value->u.object->u.string.string);
-            break;
-        case CRB_NATIVE_POINTER_VALUE:
-            sprintf(buf, "%s(%p)", value->u.object->u.native_pointer.info->name,
-                    value->u.object->u.native_pointer.pointer);
-            CRB_mbstowcs(buf, wc_buf);
-            crb_vstr_append_string(&vstr, wc_buf);
-            break;
-        case CRB_NULL_VALUE:
+            new_str = CRB_value_to_string(inter, env, line_number,
+                                          &value->u.object
+                                          ->u.assoc.member[i].value);
+            crb_vstr_append_string(&vstr, new_str);
+            MEM_free(new_str);
+        }
+        CRB_mbstowcs(")", wc_buf);
+        crb_vstr_append_string(&vstr, wc_buf);
+        break;
+    case CRB_CLOSURE_VALUE:
+        CRB_mbstowcs("closure(", wc_buf);
+        crb_vstr_append_string(&vstr, wc_buf);
+        if (value->u.closure.function->name == NULL) {
             CRB_mbstowcs("null", wc_buf);
             crb_vstr_append_string(&vstr, wc_buf);
-            break;
-        case CRB_ARRAY_VALUE:
-            CRB_mbstowcs("(", wc_buf);
-            crb_vstr_append_string(&vstr, wc_buf);
-            for (i = 0; i < value->u.object->u.array.size; i++) {
-                CRB_Char *new_str;
-                if (i > 0) {
-                    CRB_mbstowcs(", ", wc_buf);
-                    crb_vstr_append_string(&vstr, wc_buf);
-                }
-                new_str = CRB_value_to_string(inter, env, line_number,
-                                              &value->u.object->u.array.array[i]);
-                crb_vstr_append_string(&vstr, new_str);
-                MEM_free(new_str);
-            }
-            CRB_mbstowcs(")", wc_buf);
-            crb_vstr_append_string(&vstr, wc_buf);
-            break;
-        case CRB_ASSOC_VALUE:
-            CRB_mbstowcs("(", wc_buf);
-            crb_vstr_append_string(&vstr, wc_buf);
-            for (i = 0; i < value->u.object->u.assoc.member_count; i++) {
-                CRB_Char *new_str;
-                if (i > 0) {
-                    CRB_mbstowcs(", ", wc_buf);
-                    crb_vstr_append_string(&vstr, wc_buf);
-                }
-                new_str
-                        = CRB_mbstowcs_alloc(inter, env, line_number,
-                                             value->u.object->u.assoc.member[i].name);
-                DBG_assert(new_str != NULL, ("new_str is null.\n"));
-                crb_vstr_append_string(&vstr, new_str);
-                MEM_free(new_str);
+        } else {
+            CRB_Char *new_str;
+            
+            new_str = CRB_mbstowcs_alloc(inter, env, line_number,
+                                         value->u.closure.function->name);
+            DBG_assert(new_str != NULL, ("new_str is null.\n"));
+            crb_vstr_append_string(&vstr, new_str);
+            MEM_free(new_str);
+        }
+        CRB_mbstowcs(")", wc_buf);
+        crb_vstr_append_string(&vstr, wc_buf);
+        break;
+    case CRB_FAKE_METHOD_VALUE:
+        CRB_mbstowcs("fake_method(", wc_buf);
+        crb_vstr_append_string(&vstr, wc_buf);
+        {
+            CRB_Char *new_str;
 
-                CRB_mbstowcs("=>", wc_buf);
-                crb_vstr_append_string(&vstr, wc_buf);
-                new_str = CRB_value_to_string(inter, env, line_number,
-                                              &value->u.object
-                                                      ->u.assoc.member[i].value);
-                crb_vstr_append_string(&vstr, new_str);
-                MEM_free(new_str);
-            }
-            CRB_mbstowcs(")", wc_buf);
-            crb_vstr_append_string(&vstr, wc_buf);
-            break;
-        case CRB_CLOSURE_VALUE:
-            CRB_mbstowcs("closure(", wc_buf);
-            crb_vstr_append_string(&vstr, wc_buf);
-            if (value->u.closure.function->name == NULL) {
-                CRB_mbstowcs("null", wc_buf);
-                crb_vstr_append_string(&vstr, wc_buf);
-            } else {
-                CRB_Char *new_str;
-
-                new_str = CRB_mbstowcs_alloc(inter, env, line_number,
-                                             value->u.closure.function->name);
-                DBG_assert(new_str != NULL, ("new_str is null.\n"));
-                crb_vstr_append_string(&vstr, new_str);
-                MEM_free(new_str);
-            }
-            CRB_mbstowcs(")", wc_buf);
-            crb_vstr_append_string(&vstr, wc_buf);
-            break;
-        case CRB_FAKE_METHOD_VALUE:
-            CRB_mbstowcs("fake_method(", wc_buf);
-            crb_vstr_append_string(&vstr, wc_buf);
-            {
-                CRB_Char *new_str;
-
-                new_str = CRB_mbstowcs_alloc(inter, env, line_number,
-                                             value->u.fake_method.method_name);
-                DBG_assert(new_str != NULL, ("new_str is null.\n"));
-                crb_vstr_append_string(&vstr, new_str);
-                MEM_free(new_str);
-            }
-            CRB_mbstowcs(")", wc_buf);
-            crb_vstr_append_string(&vstr, wc_buf);
-            break;
-        case CRB_SCOPE_CHAIN_VALUE: /* FALLTHRU*/
-        default:
-            DBG_panic(("value->type..%d\n", value->type));
+            new_str = CRB_mbstowcs_alloc(inter, env, line_number,
+                                         value->u.fake_method.method_name);
+            DBG_assert(new_str != NULL, ("new_str is null.\n"));
+            crb_vstr_append_string(&vstr, new_str);
+            MEM_free(new_str);
+        }
+        CRB_mbstowcs(")", wc_buf);
+        crb_vstr_append_string(&vstr, wc_buf);
+        break;
+    case CRB_SCOPE_CHAIN_VALUE: /* FALLTHRU*/
+    default:
+        DBG_panic(("value->type..%d\n", value->type));
     }
 
     return vstr.string;

@@ -1,11 +1,5 @@
-/*
-** Created by 国海峰 on 17/4/29.
-** 面向内置函数开发人员的接口
-*/
-
-#ifndef VISIOND_CRB_DEV_H
-#define VISIOND_CRB_DEV_H
-
+#ifndef PUBLIC_CRB_DEV_H_INCLUDED
+#define PUBLIC_CRB_DEV_H_INCLUDED
 #include <wchar.h>
 #include "CRB.h"
 
@@ -200,7 +194,7 @@ CRB_Object *CRB_create_exception(CRB_Interpreter *inter,
 CRB_FunctionDefinition *CRB_search_function(CRB_Interpreter *inter,
                                             char *name);
 CRB_Value *CRB_search_local_variable(CRB_LocalEnvironment *env,
-                                     char *identifier);
+                                          char *identifier);
 CRB_Value *CRB_search_local_variable_w(CRB_LocalEnvironment *env,
                                        char *identifier,
                                        CRB_Boolean *is_final);
@@ -212,8 +206,8 @@ CRB_search_global_variable_w(CRB_Interpreter *inter, char *identifier,
 
 CRB_Value *
 CRB_add_local_variable(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
-                       char *identifier, CRB_Value *value,
-                       CRB_Boolean is_final);
+                        char *identifier, CRB_Value *value,
+                        CRB_Boolean is_final);
 CRB_Value *
 CRB_add_global_variable(CRB_Interpreter *inter, char *identifier,
                         CRB_Value *value, CRB_Boolean is_final);
@@ -231,7 +225,7 @@ int CRB_wcscmp(CRB_Char *s1, CRB_Char *s2);
 CRB_Char *CRB_wcscat(CRB_Char *s1, CRB_Char *s2);
 int CRB_mbstowcs_len(const char *src);
 CRB_Char *CRB_mbstowcs_alloc(CRB_Interpreter *inter, CRB_LocalEnvironment *env,
-                             int line_number,const char *src);
+                            int line_number,const char *src);
 void CRB_mbstowcs(const char *src, CRB_Char *dest);
 int CRB_wcstombs_len(const CRB_Char *src);
 void CRB_wcstombs(const CRB_Char *src, char *dest);
@@ -290,4 +284,4 @@ CRB_check_argument_func(CRB_Interpreter *inter,
   arg_count, expected_count, args, expected_type, func_name))
 
 
-#endif //VISIOND_CRB_DEV_H
+#endif /* PUBLIC_CRB_DEV_H_INCLUDED */

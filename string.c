@@ -1,6 +1,3 @@
-/*
-** Created by 国海峰 on 17/4/30.
-*/
 #include <stdio.h>
 #include <string.h>
 #include "MEM.h"
@@ -24,8 +21,8 @@ crb_add_string_literal(int letter)
     if (st_string_literal_buffer_size == st_string_literal_buffer_alloc_size) {
         st_string_literal_buffer_alloc_size += STRING_ALLOC_SIZE;
         st_string_literal_buffer
-                = MEM_realloc(st_string_literal_buffer,
-                              st_string_literal_buffer_alloc_size);
+            = MEM_realloc(st_string_literal_buffer,
+                          st_string_literal_buffer_alloc_size);
     }
     st_string_literal_buffer[st_string_literal_buffer_size] = letter;
     st_string_literal_buffer_size++;
@@ -83,4 +80,3 @@ crb_regexp_start_char(void)
 {
     return st_regexp_start_char;
 }
-
